@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Car Salahkar",
+    "slug": "car-salahkar",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.carsalahkar.app"
+    },
+    "android": {
+      "package": "com.carsalahkar.app"
+    }
+  }
+}
