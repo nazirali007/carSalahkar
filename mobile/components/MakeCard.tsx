@@ -15,14 +15,18 @@ export function MakeCard({ make, onPress }: MakeCardProps) {
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={styles.topRow}>
-        <BrandLogo makeId={make.Make_ID} makeName={make.Make_Name} />
+        <BrandLogo
+          logoUrl={make.Logo_URL}
+          makeId={make.Make_ID}
+          makeName={make.Make_Name}
+        />
         <Text style={styles.code}>Code {make.Make_ID}</Text>
       </View>
       <View>
         <Text numberOfLines={2} style={styles.name}>
           {make.Make_Name}
         </Text>
-        <Text style={styles.meta}>NHTSA vehicle make</Text>
+        <Text style={styles.meta}>India-market car brand</Text>
       </View>
       <Text style={styles.action}>View models</Text>
     </Pressable>

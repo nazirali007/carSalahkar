@@ -10,8 +10,8 @@ export default async function Home() {
       <div className="mx-auto max-w-7xl">
         <PageHeader
           eyebrow="Car Salahkar"
-          title="Choose a Car Brand"
-          description="Browse car companies from the NHTSA vPIC API. Search by company name or make code, then select a brand to see its vehicle models."
+          title="Choose an India Car Brand"
+          description="Browse car companies with models launched in India. Search by company name, then select a brand to see its India-market cars."
         />
 
         <BrandSearch makes={makes} />

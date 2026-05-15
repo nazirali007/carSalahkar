@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { getAllMakes } from "../services/nhtsa";
-import type { VehicleMake } from "../types/vehicle";
+import { getAllMakes, getAllModels } from "../services/nhtsa";
+import type { VehicleMake, VehicleModel } from "../types/vehicle";
 
 export function useVehicleMakes() {
   const [makes, setMakes] = useState<VehicleMake[]>([]);
+  const [models, setModels] = useState<VehicleModel[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,10 +16,14 @@ export function useVehicleMakes() {
       try {
         setError(null);
         setLoading(true);
-        const results = await getAllMakes();
+        const [makeResults, modelResults] = await Promise.all([
+          getAllMakes(),
+          getAllModels(),
+        ]);
 
         if (active) {
-          setMakes(results);
+          setMakes(makeResults);
+          setModels(modelResults);
         }
       } catch {
         if (active) {
@@ -52,10 +57,25 @@ export function useVehicleMakes() {
     );
   }, [makes, search]);
 
+  const matchingModels = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) {
+      return [];
+    }
+
+    return models.filter(
+      (model) =>
+        model.Model_Name.toLowerCase().includes(query) ||
+        model.Make_Name.toLowerCase().includes(query),
+    );
+  }, [models, search]);
+
   return {
     error,
     filteredMakes,
     loading,
+    matchingModels,
     makes,
     search,
     setSearch,

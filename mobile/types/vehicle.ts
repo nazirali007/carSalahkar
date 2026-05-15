@@ -1,6 +1,7 @@
 export type VehicleMake = {
   Make_ID: number;
   Make_Name: string;
+  Logo_URL: string;
 };
 
 export type VehicleModel = {
@@ -8,6 +9,8 @@ export type VehicleModel = {
   Make_Name: string;
   Model_ID: number;
   Model_Name: string;
+  Image_URL: string;
+  Logo_URL: string;
 };
 
 export type Screen =

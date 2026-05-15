@@ -1,12 +1,19 @@
+import Image from "next/image";
 import { getMakeAccent, getMakeInitials } from "@/lib/nhtsa";
 
 type BrandLogoProps = {
   makeId: number;
   makeName: string;
+  logoUrl?: string;
   size?: "sm" | "lg";
 };
 
-export function BrandLogo({ makeId, makeName, size = "lg" }: BrandLogoProps) {
+export function BrandLogo({
+  logoUrl,
+  makeId,
+  makeName,
+  size = "lg",
+}: BrandLogoProps) {
   const sizeClasses =
     size === "lg"
       ? "h-20 w-20 text-2xl"
@@ -17,10 +24,20 @@ export function BrandLogo({ makeId, makeName, size = "lg" }: BrandLogoProps) {
   return (
     <div
       aria-label={`${makeName} logo`}
-      className={`${sizeClasses} grid shrink-0 place-items-center rounded-full border border-black/10 bg-white font-bold shadow-sm`}
+      className={`${sizeClasses} relative grid shrink-0 place-items-center overflow-hidden rounded-full border border-black/10 bg-white font-bold shadow-sm`}
       style={{ color: accent }}
     >
       <span>{initials}</span>
+      {logoUrl ? (
+        <Image
+          src={logoUrl}
+          alt=""
+          fill
+          sizes={size === "lg" ? "80px" : "48px"}
+          className="object-contain p-3"
+          unoptimized
+        />
+      ) : null}
     </div>
   );
 }

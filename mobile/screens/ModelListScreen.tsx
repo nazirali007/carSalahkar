@@ -22,7 +22,11 @@ export function ModelListScreen({ make, onBack }: ModelListScreenProps) {
       </Pressable>
 
       <View style={styles.detailHeader}>
-        <BrandLogo makeId={make.Make_ID} makeName={make.Make_Name} />
+        <BrandLogo
+          logoUrl={make.Logo_URL}
+          makeId={make.Make_ID}
+          makeName={make.Make_Name}
+        />
         <View style={styles.detailTitleWrap}>
           <Text style={styles.eyebrow}>Make code {make.Make_ID}</Text>
           <Text style={styles.title}>{make.Make_Name} Models</Text>
@@ -39,7 +43,7 @@ export function ModelListScreen({ make, onBack }: ModelListScreenProps) {
           ListHeaderComponent={
             <View>
               <View style={styles.countCard}>
-                <Text style={styles.countLabel}>Models from NHTSA API</Text>
+                <Text style={styles.countLabel}>India-launched models</Text>
                 <Text style={styles.countValue}>{models.length}</Text>
               </View>
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -48,7 +52,7 @@ export function ModelListScreen({ make, onBack }: ModelListScreenProps) {
           ListEmptyComponent={
             <EmptyState
               title="No models found"
-              message="NHTSA did not return model records for this make."
+              message="No India-launched model records are listed for this brand yet."
             />
           }
           contentContainerStyle={styles.listContent}

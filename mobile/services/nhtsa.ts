@@ -1,42 +1,18 @@
+import { INDIA_CAR_MAKES, INDIA_CAR_MODELS } from "../../data/indiaCars";
 import type { VehicleMake, VehicleModel } from "../types/vehicle";
 
-const VPIC_BASE_URL = "https://vpic.nhtsa.dot.gov/api/vehicles";
-
-type VpicResponse<T> = {
-  Count: number;
-  Message: string;
-  SearchCriteria: string | null;
-  Results: T[];
-};
-
 export async function getAllMakes() {
-  const response = await fetch(`${VPIC_BASE_URL}/GetAllMakes?format=json`);
-
-  if (!response.ok) {
-    throw new Error("Unable to load car companies.");
-  }
-
-  const data = (await response.json()) as VpicResponse<VehicleMake>;
-
-  return data.Results.sort((a, b) =>
-    a.Make_Name.localeCompare(b.Make_Name, "en", { sensitivity: "base" }),
-  );
+  return INDIA_CAR_MAKES as VehicleMake[];
 }
 
 export async function getModelsForMakeId(makeId: number) {
-  const response = await fetch(
-    `${VPIC_BASE_URL}/GetModelsForMakeId/${makeId}?format=json`,
-  );
+  return INDIA_CAR_MODELS.filter(
+    (model) => model.Make_ID === makeId,
+  ) as VehicleModel[];
+}
 
-  if (!response.ok) {
-    throw new Error("Unable to load car models.");
-  }
-
-  const data = (await response.json()) as VpicResponse<VehicleModel>;
-
-  return data.Results.sort((a, b) =>
-    a.Model_Name.localeCompare(b.Model_Name, "en", { sensitivity: "base" }),
-  );
+export async function getAllModels() {
+  return INDIA_CAR_MODELS as VehicleModel[];
 }
 
 export function getMakeInitials(makeName: string) {

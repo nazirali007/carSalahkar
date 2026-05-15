@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Car Salahkar",
-  description: "Browse car brands and their available car models.",
+  description: "Browse car brands and models launched in India.",
 };
 
 export default function RootLayout({

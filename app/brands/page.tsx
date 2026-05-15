@@ -10,8 +10,8 @@ export default async function BrandsPage() {
       <div className="mx-auto max-w-7xl">
         <PageHeader
           eyebrow="Browse Brands"
-          title="All Car Companies"
-          description="This list comes from the NHTSA GetAllMakes API. Select a company logo or name to open that brand page and view its models."
+          title="India Car Companies"
+          description="This list focuses on car brands with models launched in India. Select a company logo or name to view its India-market models."
         />
 
         <BrandSearch makes={makes} />
