@@ -20,6 +20,7 @@ export function BrandLogo({
       : "h-12 w-12 text-base";
   const accent = getMakeAccent(makeId);
   const initials = getMakeInitials(makeName);
+  const logoPadding = size === "lg" ? "p-3" : "p-2";
 
   return (
     <div
@@ -27,17 +28,18 @@ export function BrandLogo({
       className={`${sizeClasses} relative grid shrink-0 place-items-center overflow-hidden rounded-full border border-black/10 bg-white font-bold shadow-sm`}
       style={{ color: accent }}
     >
-      <span>{initials}</span>
       {logoUrl ? (
         <Image
           src={logoUrl}
-          alt=""
+          alt={`${makeName} logo`}
           fill
           sizes={size === "lg" ? "80px" : "48px"}
-          className="object-contain p-3"
+          className={`object-contain ${logoPadding}`}
           unoptimized
         />
-      ) : null}
+      ) : (
+        <span>{initials}</span>
+      )}
     </div>
   );
 }

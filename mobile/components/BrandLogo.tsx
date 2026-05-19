@@ -29,9 +29,6 @@ export function BrandLogo({
         },
       ]}
     >
-      <Text style={[styles.logoText, { color: accent }]}>
-        {getMakeInitials(makeName)}
-      </Text>
       {logoUrl ? (
         <Image
           alt={`${makeName} logo`}
@@ -40,7 +37,11 @@ export function BrandLogo({
           style={styles.logoImage}
           resizeMode="contain"
         />
-      ) : null}
+      ) : (
+        <Text style={[styles.logoText, { color: accent }]}>
+          {getMakeInitials(makeName)}
+        </Text>
+      )}
     </View>
   );
 }

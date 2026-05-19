@@ -14,7 +14,7 @@ export function CarModelCard({ model }: CarModelCardProps) {
       className="group overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80"
       style={{ "--model-accent": accent } as CSSProperties}
     >
-      <div className="relative grid aspect-[16/10] place-items-center overflow-hidden bg-[linear-gradient(135deg,#f8fafc,#e0f2fe_45%,#fef3c7)]">
+      <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
         <Image
           src={model.Image_URL}
           alt={`${model.Make_Name} ${model.Model_Name}`}
@@ -45,19 +45,6 @@ export function CarModelCard({ model }: CarModelCardProps) {
           className="absolute -bottom-14 -right-10 h-40 w-40 rounded-full opacity-15 transition duration-300 group-hover:scale-125"
           style={{ backgroundColor: accent }}
         />
-        <div className="relative h-28 w-full max-w-72 transition duration-300 group-hover:scale-105">
-          <div
-            className="absolute bottom-5 left-6 right-6 h-10 rounded-t-[48px] shadow-lg"
-            style={{ backgroundColor: accent }}
-          />
-          <div className="absolute bottom-10 left-20 right-20 h-10 rounded-t-full bg-zinc-800" />
-          <div className="absolute bottom-5 left-16 h-8 w-12 rounded-t-full bg-sky-100/80" />
-          <div className="absolute bottom-5 right-16 h-8 w-12 rounded-t-full bg-sky-100/80" />
-          <div className="absolute bottom-0 left-10 h-11 w-11 rounded-full border-8 border-zinc-900 bg-white shadow-inner" />
-          <div className="absolute bottom-0 right-10 h-11 w-11 rounded-full border-8 border-zinc-900 bg-white shadow-inner" />
-          <div className="absolute bottom-8 left-10 h-3 w-8 rounded-full bg-amber-300 shadow-sm" />
-          <div className="absolute bottom-8 right-10 h-3 w-8 rounded-full bg-red-400 shadow-sm" />
-        </div>
       </div>
 
       <div className="space-y-4 p-5">

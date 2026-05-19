@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import type { VehicleModel } from "../types/vehicle";
-import { CarIllustration } from "./CarIllustration";
 
 type ModelCardProps = {
   model: VehicleModel;
@@ -13,7 +12,6 @@ export function ModelCard({ model }: ModelCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.imageWrap}>
-        <CarIllustration />
         {!imageFailed ? (
           <Image
             alt={`${model.Make_Name} ${model.Model_Name}`}
@@ -23,18 +21,24 @@ export function ModelCard({ model }: ModelCardProps) {
             resizeMode="cover"
             onError={() => setImageFailed(true)}
           />
-        ) : null}
-        <View style={styles.imageOverlay} />
+        ) : (
+          <View style={styles.imageFallback}>
+            <Text style={styles.imageFallbackText}>{model.Model_Name}</Text>
+          </View>
+        )}
+        {!imageFailed ? <View style={styles.imageOverlay} /> : null}
         <Text style={styles.imageBadge}>{model.Make_Name}</Text>
-        <View style={styles.logoBadge}>
-          <Image
-            alt={`${model.Make_Name} logo`}
-            accessibilityLabel={`${model.Make_Name} logo`}
-            source={{ uri: model.Logo_URL }}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
-        </View>
+        {model.Logo_URL ? (
+          <View style={styles.logoBadge}>
+            <Image
+              alt={`${model.Make_Name} logo`}
+              accessibilityLabel={`${model.Make_Name} logo`}
+              source={{ uri: model.Logo_URL }}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
+          </View>
+        ) : null}
       </View>
       <View style={styles.content}>
         <Text numberOfLines={2} style={styles.name}>
@@ -78,6 +82,19 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     width: "100%",
+  },
+  imageFallback: {
+    alignItems: "center",
+    backgroundColor: "#f4f4f5",
+    height: "100%",
+    justifyContent: "center",
+    padding: 20,
+  },
+  imageFallbackText: {
+    color: "#52525b",
+    fontSize: 18,
+    fontWeight: "900",
+    textAlign: "center",
   },
   imageBadge: {
     backgroundColor: "#18181b",
