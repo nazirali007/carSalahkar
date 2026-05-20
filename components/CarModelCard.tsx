@@ -8,10 +8,11 @@ type CarModelCardProps = {
 
 export function CarModelCard({ model }: CarModelCardProps) {
   const accent = getMakeAccent(model.Make_ID);
+  console.log("car logo url", model.Logo_URL);
 
   return (
     <article
-      className="group overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80"
+      className="group overflow-hidden border border-red-500 rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80"
       style={{ "--model-accent": accent } as CSSProperties}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">

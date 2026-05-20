@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandLogo } from "@/components/BrandLogo";
-import { CarModelCard } from "@/components/CarModelCard";
+import { CarModelExplorer } from "@/components/CarModelExplorer";
 import { getMakeById, getModelsForMakeId } from "@/lib/nhtsa";
 
 type BrandPageProps = {
@@ -81,7 +81,7 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
             </div>
           </div>
 
-          <div className="rounded-lg border border-zinc-200 bg-white px-5 py-4 shadow-sm">
+          <div className="rounded-lg border border-red-500 bg-white px-5 py-4 shadow-sm">
             <p className="text-sm text-zinc-500">India-launched models</p>
             <p className="mt-1 text-3xl font-bold text-zinc-950">
               {models.length}
@@ -90,11 +90,7 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
         </header>
 
         {models.length > 0 ? (
-          <section className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {models.map((model) => (
-              <CarModelCard key={model.Model_ID} model={model} />
-            ))}
-          </section>
+          <CarModelExplorer models={models} />
         ) : (
           <div className="mt-10 rounded-lg border border-dashed border-zinc-300 bg-white p-8 text-center">
             <p className="font-semibold text-zinc-950">No models found</p>

@@ -1,4 +1,4 @@
-const staticCarData = {
+ const dummyCarData = {
   "brand": "Maruti Suzuki",
   "market": "India",
   "schemaVersion": "1.1",
@@ -132,5 +132,3 @@ const staticCarData = {
     }
   ]
 };
-
-export default staticCarData;
