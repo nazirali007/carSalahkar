@@ -29,6 +29,10 @@ export async function getModelsForMakeId(makeId: number) {
   return INDIA_CAR_MODELS.filter((model) => model.Make_ID === makeId);
 }
 
+export async function getModelById(modelId: number) {
+  return INDIA_CAR_MODELS.find((model) => model.Model_ID === modelId);
+}
+
 export async function getAllModels() {
   return INDIA_CAR_MODELS;
 }

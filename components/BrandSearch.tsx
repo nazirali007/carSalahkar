@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { BrandCard } from "@/components/BrandCard";
 import { INDIA_CAR_MODELS } from "@/data/indiaCars";
 import { getMakeAccent, type VehicleMake } from "@/lib/nhtsa";
@@ -78,9 +79,9 @@ export function BrandSearch({ makes }: BrandSearchProps) {
               const accent = getMakeAccent(model.Make_ID);
 
               return (
-                <a
+                <Link
                   key={model.Model_ID}
-                  href={`/brands/${model.Make_ID}`}
+                  href={`/cars/${model.Model_ID}`}
                   className="group flex items-center gap-4 overflow-hidden rounded-lg border border-zinc-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300"
                   style={{ "--model-accent": accent } as CSSProperties}
                 >
@@ -118,7 +119,7 @@ export function BrandSearch({ makes }: BrandSearchProps) {
                     className="h-12 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: accent }}
                   />
-                </a>
+                </Link>
               );
             })}
           </div>

@@ -17,18 +17,31 @@ type IndiaCarBrand = IndiaVehicleMake & {
   models: string[];
 };
 
-function getCarImageUrl(makeName: string, modelName: string) {
+export function getCarImageUrl(
+  makeName: string,
+  modelName: string,
+  angle = "23",
+) {
   const params = new URLSearchParams({
     customer: "img",
     make: makeName,
     modelFamily: modelName,
     countryCode: "IN",
-    angle: "23",
+    angle,
     zoomType: "relative",
     width: "800",
   });
 
   return `https://cdn.imagin.studio/getImage?${params.toString()}`;
+}
+
+export function getCarImageGallery(makeName: string, modelName: string) {
+  return [
+    { label: "Front three-quarter", url: getCarImageUrl(makeName, modelName, "23") },
+    { label: "Side profile", url: getCarImageUrl(makeName, modelName, "09") },
+    { label: "Rear three-quarter", url: getCarImageUrl(makeName, modelName, "05") },
+    { label: "Studio angle", url: getCarImageUrl(makeName, modelName, "01") },
+  ];
 }
 
 function getBrandLogoUrl(domain: string) {

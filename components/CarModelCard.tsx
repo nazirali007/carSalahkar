@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
 type CarModelCardProps = {
@@ -8,11 +9,11 @@ type CarModelCardProps = {
 
 export function CarModelCard({ model }: CarModelCardProps) {
   const accent = getMakeAccent(model.Make_ID);
-  console.log("car logo url", model.Logo_URL);
 
   return (
-    <article
-      className="group overflow-hidden border border-red-500 rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80"
+    <Link
+      href={`/cars/${model.Model_ID}`}
+      className="group block overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300"
       style={{ "--model-accent": accent } as CSSProperties}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
@@ -71,13 +72,13 @@ export function CarModelCard({ model }: CarModelCardProps) {
         </div>
 
         <div className="flex items-center justify-between border-t border-zinc-100 pt-4 text-sm font-semibold text-zinc-900">
-          <span>Model profile</span>
+          <span>View full details</span>
           <span
             className="h-2 w-12 rounded-full transition duration-300 group-hover:w-16"
             style={{ backgroundColor: accent }}
           />
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
