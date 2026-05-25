@@ -14,12 +14,12 @@ export function CarModelExplorer({ models }: CarModelExplorerProps) {
   }
 
   return (
-    <section className="mt-10 space-y-8">
+    <section className="mt-8 space-y-7 md:mt-10 md:space-y-8">
       <div>
         <CarSpecifications model={selectedModel} />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
         {models.map((model) => (
           <CarModelCard key={model.Model_ID} model={model} />
         ))}

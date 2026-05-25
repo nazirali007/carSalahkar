@@ -17,22 +17,51 @@ type IndiaCarBrand = IndiaVehicleMake & {
   models: string[];
 };
 
+const CAR_PREVIEW_COLORS = [
+  ["#0f766e", "#ccfbf1", "#042f2e"],
+  ["#2563eb", "#dbeafe", "#172554"],
+  ["#b91c1c", "#fee2e2", "#450a0a"],
+  ["#7c3aed", "#ede9fe", "#2e1065"],
+  ["#ca8a04", "#fef3c7", "#422006"],
+  ["#334155", "#e2e8f0", "#0f172a"],
+  ["#047857", "#d1fae5", "#052e16"],
+  ["#c2410c", "#ffedd5", "#431407"],
+];
+
+function getPreviewPalette(makeName: string) {
+  const hash = makeName
+    .split("")
+    .reduce((total, letter) => total + letter.charCodeAt(0), 0);
+
+  return CAR_PREVIEW_COLORS[hash % CAR_PREVIEW_COLORS.length];
+}
+
+function getBodyPath(angle: string) {
+  if (angle === "09") {
+    return "M180 375 C215 315 292 280 410 280 H590 C684 280 759 317 792 374 L838 384 C855 389 866 404 866 421 V468 H134 V424 C134 404 147 388 166 383 Z";
+  }
+
+  if (angle === "05") {
+    return "M172 386 C206 323 284 292 405 292 H610 C704 292 770 327 808 380 L852 394 C869 400 878 414 878 431 V470 H122 V424 C122 405 136 390 154 386 Z";
+  }
+
+  if (angle === "01") {
+    return "M226 374 C250 320 328 292 500 292 C672 292 750 320 774 374 L812 389 C831 397 842 414 842 434 V472 H158 V434 C158 414 169 397 188 389 Z";
+  }
+
+  return "M160 386 C205 322 293 287 424 287 H592 C693 287 760 323 807 382 L850 394 C867 399 878 415 878 433 V471 H122 V425 C122 407 136 391 154 387 Z";
+}
+
 export function getCarImageUrl(
   makeName: string,
   modelName: string,
   angle = "23",
 ) {
-  const params = new URLSearchParams({
-    customer: "img",
-    make: makeName,
-    modelFamily: modelName,
-    countryCode: "IN",
-    angle,
-    zoomType: "relative",
-    width: "800",
-  });
+  const [accent, tint, ink] = getPreviewPalette(makeName);
+  const bodyPath = getBodyPath(angle);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-label="${makeName} ${modelName} car preview"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="${tint}"/><stop offset="1" stop-color="#ffffff"/></linearGradient><linearGradient id="body" x1="0" x2="1"><stop offset="0" stop-color="${accent}"/><stop offset="1" stop-color="${ink}"/></linearGradient><filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#0f172a" flood-opacity="0.2"/></filter></defs><rect width="1000" height="620" fill="url(#bg)"/><circle cx="820" cy="132" r="150" fill="${accent}" opacity="0.1"/><circle cx="180" cy="510" r="180" fill="${ink}" opacity="0.06"/><path d="M130 486 H870" stroke="${ink}" stroke-width="10" stroke-linecap="round" opacity="0.12"/><g filter="url(#shadow)"><path d="${bodyPath}" fill="url(#body)"/><path d="M318 296 C347 251 390 230 455 230 H570 C626 230 670 253 711 298 Z" fill="#ffffff" opacity="0.9"/><path d="M448 247 H566 C612 247 646 263 675 292 H418 C425 274 434 260 448 247 Z" fill="${ink}" opacity="0.22"/><path d="M190 393 H811" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.28"/><circle cx="304" cy="466" r="58" fill="${ink}"/><circle cx="304" cy="466" r="29" fill="#ffffff" opacity="0.9"/><circle cx="704" cy="466" r="58" fill="${ink}"/><circle cx="704" cy="466" r="29" fill="#ffffff" opacity="0.9"/><path d="M792 404 H850" stroke="#fef08a" stroke-width="14" stroke-linecap="round"/><path d="M151 404 H208" stroke="#fecaca" stroke-width="14" stroke-linecap="round"/></g><text x="72" y="104" fill="${ink}" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800">${makeName}</text><text x="72" y="145" fill="${ink}" opacity="0.72" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">${modelName}</text></svg>`;
 
-  return `https://cdn.imagin.studio/getImage?${params.toString()}`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
 export function getCarImageGallery(makeName: string, modelName: string) {

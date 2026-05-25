@@ -14,7 +14,7 @@ export function BrandCard({ make }: BrandCardProps) {
     <Link
       href={`/brands/${make.Make_ID}`}
       aria-label={`View ${make.Make_Name} models`}
-      className="group relative flex min-h-56 flex-col justify-between overflow-hidden rounded-lg border border-zinc-200 bg-white p-5 shadow-sm outline-none transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:ring-4 focus-visible:ring-zinc-300"
+      className="group relative grid gap-4 overflow-hidden rounded-lg border border-zinc-200 bg-white p-4 shadow-sm outline-none transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:ring-4 focus-visible:ring-zinc-300 md:min-h-56 md:p-5"
       style={{ "--brand-accent": accent } as CSSProperties}
     >
       <div
@@ -37,11 +37,11 @@ export function BrandCard({ make }: BrandCardProps) {
         </span>
       </div>
 
-      <div className="relative">
+      <div className="relative min-w-0">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-400">
           Vehicle make
         </p>
-        <h2 className="text-2xl font-bold text-zinc-950 transition group-hover:text-[color:var(--brand-accent)]">
+        <h2 className="break-words text-xl font-bold text-zinc-950 transition group-hover:text-[color:var(--brand-accent)] md:text-2xl">
           {make.Make_Name}
         </h2>
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-500">
@@ -49,7 +49,7 @@ export function BrandCard({ make }: BrandCardProps) {
         </p>
       </div>
 
-      <div className="relative mt-5 flex items-center justify-between border-t border-zinc-100 pt-4">
+      <div className="relative flex items-center justify-between border-t border-zinc-100 pt-4 md:mt-auto">
         <span className="text-sm font-semibold text-zinc-900">View models</span>
         <span
           aria-hidden="true"

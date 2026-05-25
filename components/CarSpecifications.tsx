@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { CarPhoto } from "@/components/CarPhoto";
 import { getCarSpecification } from "@/data/carSpecifications";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
@@ -108,7 +109,7 @@ function getSeating(bodyType: string) {
 
 function DetailItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
+    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
       <dt className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-400">
         {label}
       </dt>
@@ -194,28 +195,27 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
       style={{ "--spec-accent": accent } as CSSProperties}
     >
       <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.8fr)]">
-        <div className="relative min-h-72 overflow-hidden bg-zinc-100">
-          <Image
-            src={model.Image_URL}
+        <div className="relative min-h-64 overflow-hidden bg-zinc-100 sm:min-h-72">
+          <CarPhoto
+            makeName={model.Make_Name}
+            modelName={model.Model_Name}
+            fallbackSrc={model.Image_URL}
             alt={`${model.Make_Name} ${model.Model_Name}`}
-            fill
-            sizes="(min-width: 1024px) 55vw, 100vw"
-            className="object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
             priority
-            unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6 text-white">
+          <div className="absolute bottom-4 left-4 right-4 text-white sm:bottom-6 sm:left-6 sm:right-6">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/75">
               Selected car
             </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-4xl">
               {model.Make_Name} {model.Model_Name}
             </h2>
           </div>
         </div>
 
-        <div className="p-6 sm:p-7">
+        <div className="p-4 sm:p-6 lg:p-7">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">
@@ -237,7 +237,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
             </div>
           </div>
 
-          <div className="mt-6 rounded-lg border border-zinc-200 bg-zinc-950 p-5 text-white">
+          <div className="mt-5 rounded-lg border border-zinc-200 bg-zinc-950 p-4 text-white sm:mt-6 sm:p-5">
             <p className="text-sm font-semibold text-zinc-300">
               {specification?.price.label ?? "Price"}
             </p>
@@ -250,7 +250,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
             </p>
           </div>
 
-          <dl className="mt-5 grid gap-3 sm:grid-cols-2">
+          <dl className="mt-5 grid grid-cols-2 gap-3">
             {summarySpecs.map(([label, value]) => (
               <DetailItem key={label} label={label} value={value} />
             ))}
@@ -259,10 +259,10 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
       </div>
 
       {specification ? (
-        <div className="grid gap-6 border-t border-zinc-200 p-6 sm:p-7 lg:grid-cols-2">
+        <div className="grid gap-6 border-t border-zinc-200 p-4 sm:p-6 lg:grid-cols-2 lg:p-7">
           <div>
             <h4 className="text-lg font-bold text-zinc-950">Engine</h4>
-            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+            <dl className="mt-4 grid grid-cols-2 gap-3">
               <DetailItem label="Engine type" value={specification.engine.type} />
               <DetailItem label="Capacity" value={specification.engine.capacity} />
               <DetailItem label="Cylinders" value={specification.engine.cylinders} />
@@ -274,7 +274,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
 
           <div>
             <h4 className="text-lg font-bold text-zinc-950">Mileage & Capacity</h4>
-            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+            <dl className="mt-4 grid grid-cols-2 gap-3">
               <DetailItem label="Mileage" value={specification.fuelAndMileage.mileage} />
               <DetailItem label="Transmission" value={specification.fuelAndMileage.transmission} />
               <DetailItem label="Fuel tank" value={specification.fuelAndMileage.fuelTank} />
@@ -286,7 +286,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
 
           <div>
             <h4 className="text-lg font-bold text-zinc-950">Dimensions</h4>
-            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+            <dl className="mt-4 grid grid-cols-2 gap-3">
               <DetailItem label="Length" value={specification.dimensions.length} />
               <DetailItem label="Width" value={specification.dimensions.width} />
               <DetailItem label="Height" value={specification.dimensions.height} />
@@ -326,7 +326,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
           </div>
         </div>
       ) : (
-        <div className="border-t border-zinc-200 p-6 sm:p-7">
+        <div className="border-t border-zinc-200 p-4 sm:p-6 lg:p-7">
           <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm leading-6 text-zinc-600">
             Detailed buyer specifications for {model.Make_Name} {model.Model_Name} are not
             added yet. The panel is ready for exact ex-showroom price, engine,
@@ -335,7 +335,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
         </div>
       )}
 
-      <div className="border-t border-zinc-200 p-6 sm:p-7">
+      <div className="border-t border-zinc-200 p-4 sm:p-6 lg:p-7">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">
@@ -360,7 +360,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
             Loading free vehicle API data...
           </p>
         ) : freeDetails ? (
-          <div className="mt-4 grid gap-4 lg:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
             <DetailItem label="Provider" value={freeDetails.provider} />
             <DetailItem label="API make searched" value={freeDetails.searchedMake} />
             <DetailItem

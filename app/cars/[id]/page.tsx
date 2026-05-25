@@ -58,7 +58,7 @@ export default async function CarDetailPage({ params }: CarDetailPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 px-6 py-10 sm:px-8 lg:px-12">
+    <main className="min-h-screen bg-zinc-50 px-4 py-6 sm:px-6 md:py-10 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <SingleCarDetails model={model} />
       </div>
