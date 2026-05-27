@@ -45,9 +45,10 @@ export function ModelCard({ model }: ModelCardProps) {
           {model.Model_Name}
         </Text>
         <Text style={styles.make}>{model.Make_Name}</Text>
-        <View style={styles.tags}>
-          <Text style={styles.tag}>Model code: {model.Model_ID}</Text>
-          <Text style={styles.tag}>Make code: {model.Make_ID}</Text>
+        <View style={styles.priceBox}>
+          <Text style={styles.priceLabel}>Indian price</Text>
+          <Text style={styles.priceValue}>{model.Price_Label}</Text>
+          <Text style={styles.priceNote}>{model.Price_Note}</Text>
         </View>
       </View>
     </View>
@@ -138,20 +139,31 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
   },
-  tags: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-    marginTop: 4,
-  },
-  tag: {
+  priceBox: {
     backgroundColor: "#f4f4f5",
-    borderRadius: 999,
-    color: "#52525b",
+    borderColor: "#e4e4e7",
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: 4,
+    padding: 12,
+  },
+  priceLabel: {
+    color: "#a1a1aa",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1,
+    textTransform: "uppercase",
+  },
+  priceNote: {
+    color: "#71717a",
     fontSize: 12,
     fontWeight: "700",
-    overflow: "hidden",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    marginTop: 3,
+  },
+  priceValue: {
+    color: "#09090b",
+    fontSize: 17,
+    fontWeight: "900",
+    marginTop: 4,
   },
 });

@@ -13,6 +13,8 @@ export type VehicleModel = {
   Model_Name: string;
   Image_URL: string;
   Logo_URL: string;
+  Price_Label: string;
+  Price_Note: string;
 };
 
 export async function getAllMakes() {

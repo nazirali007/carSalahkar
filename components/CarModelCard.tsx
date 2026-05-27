@@ -61,13 +61,16 @@ export function CarModelCard({ model }: CarModelCardProps) {
           </p>
         </div>
 
-        <div className="hidden flex-wrap gap-2 text-xs font-semibold text-zinc-600 sm:flex">
-          <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
-            Model code: {model.Model_ID}
-          </span>
-          <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
-            Make code: {model.Make_ID}
-          </span>
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-400">
+            Indian price
+          </p>
+          <p className="mt-1 text-base font-extrabold text-zinc-950">
+            {model.Price_Label}
+          </p>
+          <p className="mt-1 text-xs font-semibold text-zinc-500">
+            {model.Price_Note}
+          </p>
         </div>
 
         <div className="flex items-center justify-between border-t border-zinc-100 pt-3 text-sm font-semibold text-zinc-900 md:pt-4">

@@ -68,6 +68,7 @@ export function CarPhoto({
       sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
       className={className}
       priority={priority}
+      onError={() => setSrc(fallbackSrc)}
       unoptimized
     />
   );
