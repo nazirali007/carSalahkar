@@ -28,7 +28,7 @@ export function ModelListScreen({ make, onBack }: ModelListScreenProps) {
           makeName={make.Make_Name}
         />
         <View style={styles.detailTitleWrap}>
-          <Text style={styles.eyebrow}>Make code {make.Make_ID}</Text>
+          <Text style={styles.eyebrow}>India car brand</Text>
           <Text style={styles.title}>{make.Make_Name} Models</Text>
         </View>
       </View>

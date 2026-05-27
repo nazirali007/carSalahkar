@@ -19,7 +19,7 @@ export function CarModelExplorer({ models }: CarModelExplorerProps) {
         <CarSpecifications model={selectedModel} />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
         {models.map((model) => (
           <CarModelCard key={model.Model_ID} model={model} />
         ))}

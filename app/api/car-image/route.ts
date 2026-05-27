@@ -46,6 +46,7 @@ function getMakeAliases(make: string) {
     make.replace(/\s+Motors$/i, ""),
     make.replace(/^Maruti Suzuki$/i, "Suzuki"),
     make.replace(/^MG Motor$/i, "MG"),
+    make.replace(/^Mercedes-Benz$/i, "Mercedes"),
   ]);
 }
 
@@ -55,6 +56,10 @@ function getModelAliases(model: string) {
     model.replace(/\s+EV$/i, ""),
     model.replace(/\s+Electric$/i, ""),
     model.replace(/\s+R-Line$/i, ""),
+    model.replace(/\s+LWB$/i, ""),
+    model.replace(/\s+Long$/i, ""),
+    model.replace(/^Mercedes-Maybach\s+/i, "Maybach "),
+    model.replace(/^Mercedes-AMG\s+/i, "AMG "),
     model.replace(/\s+/g, ""),
   ]);
 }

@@ -239,14 +239,13 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
 
           <div className="mt-5 rounded-lg border border-zinc-200 bg-zinc-950 p-4 text-white sm:mt-6 sm:p-5">
             <p className="text-sm font-semibold text-zinc-300">
-              {specification?.price.label ?? "Price"}
+              {specification?.price.label ?? "Starting ex-showroom price"}
             </p>
             <p className="mt-2 text-3xl font-bold">
-              {specification?.price.amount ?? "To be updated"}
+              {model.Price_Label}
             </p>
             <p className="mt-2 text-sm leading-6 text-zinc-300">
-              {specification?.price.note ??
-                "Exact ex-showroom price is not added for this model yet."}
+              {model.Price_Note}
             </p>
           </div>
 
@@ -295,7 +294,6 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
                 label="Ground clearance"
                 value={specification.dimensions.groundClearance}
               />
-              <DetailItem label="Model code" value={String(model.Model_ID)} />
             </dl>
           </div>
 

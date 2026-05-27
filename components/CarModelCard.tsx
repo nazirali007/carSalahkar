@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CarPhoto } from "@/components/CarPhoto";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
 type CarModelCardProps = {
@@ -17,14 +18,12 @@ export function CarModelCard({ model }: CarModelCardProps) {
       style={{ "--model-accent": accent } as CSSProperties}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
-        <Image
-          src={model.Image_URL}
+        <CarPhoto
+          makeName={model.Make_Name}
+          modelName={model.Model_Name}
+          fallbackSrc={model.Image_URL}
           alt={`${model.Make_Name} ${model.Model_Name}`}
-          fill
-          sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-          className="z-10 object-cover transition duration-500 group-hover:scale-105"
-          loading="lazy"
-          unoptimized
+          className="absolute inset-0 z-10 h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
         <div
@@ -62,13 +61,16 @@ export function CarModelCard({ model }: CarModelCardProps) {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2 text-xs font-semibold text-zinc-600">
-          <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
-            Model code: {model.Model_ID}
-          </span>
-          <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
-            Make code: {model.Make_ID}
-          </span>
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-400">
+            Indian price
+          </p>
+          <p className="mt-1 text-base font-extrabold text-zinc-950">
+            {model.Price_Label}
+          </p>
+          <p className="mt-1 text-xs font-semibold text-zinc-500">
+            {model.Price_Note}
+          </p>
         </div>
 
         <div className="flex items-center justify-between border-t border-zinc-100 pt-4 text-sm font-semibold text-zinc-900">

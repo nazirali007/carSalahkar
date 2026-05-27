@@ -34,7 +34,7 @@ export function BrandLogo({
           alt={`${makeName} logo`}
           fill
           sizes={size === "lg" ? "80px" : "48px"}
-          className={`object-contain ${logoPadding}`}
+          className={`object-contain ${logoPadding} rounded-full`}
           unoptimized
         />
       ) : (

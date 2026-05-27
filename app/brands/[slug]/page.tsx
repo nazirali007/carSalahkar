@@ -73,7 +73,7 @@ export default async function BrandDetailPage({ params }: BrandPageProps) {
             />
             <div className="min-w-0">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">
-                Make code {make.Make_ID}
+                India car brand
               </p>
               <h1 className="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl md:text-5xl">
                 {make.Make_Name} Models

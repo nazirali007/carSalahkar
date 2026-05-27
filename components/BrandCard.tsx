@@ -26,15 +26,12 @@ export function BrandCard({ make }: BrandCardProps) {
         style={{ backgroundColor: accent }}
       />
 
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start">
         <BrandLogo
           logoUrl={make.Logo_URL}
           makeId={make.Make_ID}
           makeName={make.Make_Name}
         />
-        <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold text-zinc-600">
-          Code {make.Make_ID}
-        </span>
       </div>
 
       <div className="relative min-w-0">

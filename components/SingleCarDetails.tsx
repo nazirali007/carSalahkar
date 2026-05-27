@@ -31,8 +31,8 @@ export function SingleCarDetails({ model }: SingleCarDetailsProps) {
             {model.Make_Name} {model.Model_Name}
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-zinc-600">
-            View specifications, price information, model codes, feature details,
-            and multiple studio images for this car.
+            View specifications, price information, feature details, and multiple
+            studio images for this car.
           </p>
         </div>
 
@@ -48,8 +48,8 @@ export function SingleCarDetails({ model }: SingleCarDetailsProps) {
             />
           </div>
           <div>
-            <p className="text-sm text-zinc-500">Model code</p>
-            <p className="text-2xl font-bold text-zinc-950">{model.Model_ID}</p>
+            <p className="text-sm text-zinc-500">Brand</p>
+            <p className="text-xl font-bold text-zinc-950">{model.Make_Name}</p>
           </div>
         </div>
       </div>
