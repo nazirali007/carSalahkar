@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CarPhoto } from "@/components/CarPhoto";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
 type CarModelCardProps = {
@@ -14,25 +13,27 @@ export function CarModelCard({ model }: CarModelCardProps) {
   return (
     <Link
       href={`/cars/${model.Model_ID}`}
-      className="group flex overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300 md:block"
+      className="group block overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300"
       style={{ "--model-accent": accent } as CSSProperties}
     >
-      <div className="relative min-h-44 w-32 shrink-0 overflow-hidden bg-zinc-100 sm:w-40 md:aspect-[16/10] md:w-auto md:min-h-0">
-        <CarPhoto
-          makeName={model.Make_Name}
-          modelName={model.Model_Name}
-          fallbackSrc={model.Image_URL}
+      <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
+        <Image
+          src={model.Image_URL}
           alt={`${model.Make_Name} ${model.Model_Name}`}
-          className="absolute inset-0 z-10 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          fill
+          sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+          className="z-10 object-cover transition duration-500 group-hover:scale-105"
+          loading="lazy"
+          unoptimized
         />
         <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
         <div
-          className="absolute left-3 top-3 z-30 rounded-full px-2.5 py-1 text-xs font-bold text-white shadow-sm md:left-5 md:top-5 md:px-3"
+          className="absolute left-5 top-5 z-30 rounded-full px-3 py-1 text-xs font-bold text-white shadow-sm"
           style={{ backgroundColor: accent }}
         >
           {model.Make_Name}
         </div>
-        <div className="absolute bottom-3 right-3 z-30 grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-white/60 bg-white shadow-md md:bottom-auto md:right-5 md:top-5 md:h-12 md:w-12">
+        <div className="absolute right-5 top-5 z-30 grid h-12 w-12 place-items-center overflow-hidden rounded-full border border-white/60 bg-white shadow-md">
           <Image
             src={model.Logo_URL}
             alt={`${model.Make_Name} logo`}
@@ -48,32 +49,29 @@ export function CarModelCard({ model }: CarModelCardProps) {
         />
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 p-4 md:block md:space-y-4 md:p-5">
+      <div className="space-y-4 p-5">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-400">
             Model
           </p>
-          <h2 className="mt-2 break-words text-lg font-bold text-zinc-950 transition group-hover:text-[color:var(--model-accent)] md:text-xl">
+          <h2 className="mt-2 text-xl font-bold text-zinc-950 transition group-hover:text-[color:var(--model-accent)]">
             {model.Model_Name}
           </h2>
-          <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-500">
+          <p className="mt-2 text-sm leading-6 text-zinc-500">
             A {model.Make_Name} model launched for the India market.
           </p>
         </div>
 
-        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-400">
-            Indian price
-          </p>
-          <p className="mt-1 text-base font-extrabold text-zinc-950">
-            {model.Price_Label}
-          </p>
-          <p className="mt-1 text-xs font-semibold text-zinc-500">
-            {model.Price_Note}
-          </p>
+        <div className="flex flex-wrap gap-2 text-xs font-semibold text-zinc-600">
+          <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
+            Model code: {model.Model_ID}
+          </span>
+          <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1">
+            Make code: {model.Make_ID}
+          </span>
         </div>
 
-        <div className="flex items-center justify-between border-t border-zinc-100 pt-3 text-sm font-semibold text-zinc-900 md:pt-4">
+        <div className="flex items-center justify-between border-t border-zinc-100 pt-4 text-sm font-semibold text-zinc-900">
           <span>View full details</span>
           <span
             className="h-2 w-12 rounded-full transition duration-300 group-hover:w-16"
