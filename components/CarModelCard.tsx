@@ -24,6 +24,7 @@ export function CarModelCard({ model }: CarModelCardProps) {
           fallbackSrc={model.Image_URL}
           alt={`${model.Make_Name} ${model.Model_Name}`}
           className="absolute inset-0 z-10 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          loadRemoteImage={false}
         />
         <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
         <div

@@ -49,9 +49,48 @@ const SUV_WORDS = [
   "basalt",
   "sealion",
   "urban cruiser",
+  "x1",
+  "x3",
+  "x5",
+  "xm",
+  "q3",
+  "q5",
+  "q7",
+  "q8",
+  "xc60",
+  "xc90",
+  "ex30",
+  "ex40",
+  "ec40",
+  "gla",
+  "glc",
+  "gle",
+  "gls",
+  "g-class",
 ];
-const SEDAN_WORDS = ["dzire", "aura", "verna", "tigor", "city", "amaze", "slavia", "virtus", "ciaz"];
-const MPV_WORDS = ["ertiga", "xl6", "invicto", "carens", "rumion", "innova", "vellfire", "carnival", "m9"];
+const SEDAN_WORDS = [
+  "dzire",
+  "aura",
+  "verna",
+  "tigor",
+  "city",
+  "amaze",
+  "slavia",
+  "virtus",
+  "ciaz",
+  "series",
+  "m340i",
+  "a4",
+  "a6",
+  "s5",
+  "cla",
+  "c-class",
+  "e-class",
+  "s-class",
+  "eqs sedan",
+];
+const MPV_WORDS = ["ertiga", "xl6", "invicto", "carens", "rumion", "innova", "vellfire", "carnival", "m9", "v-class"];
+const PREMIUM_MAKES = ["BMW", "Audi", "Volvo", "Mercedes-Benz", "BYD", "Jeep"];
 
 function includesAny(value: string, words: string[]) {
   return words.some((word) => value.includes(word));
@@ -75,20 +114,6 @@ function getBodyType(modelName: string) {
   return "Hatchback";
 }
 
-function getPowertrain(modelName: string) {
-  const normalized = modelName.toLowerCase();
-
-  if (includesAny(normalized, ELECTRIC_WORDS)) {
-    return "Electric";
-  }
-
-  if (includesAny(normalized, HYBRID_WORDS)) {
-    return "Hybrid / Petrol";
-  }
-
-  return "Petrol / CNG where available";
-}
-
 function getTransmission(modelName: string) {
   const normalized = modelName.toLowerCase();
 
@@ -99,12 +124,182 @@ function getTransmission(modelName: string) {
   return "Manual / Automatic where available";
 }
 
-function getSeating(bodyType: string) {
-  if (bodyType === "MPV") {
-    return "6 / 7 seats";
+function isPremiumMake(makeName: string) {
+  return PREMIUM_MAKES.includes(makeName);
+}
+
+function getGeneratedEngine(model: VehicleModel, bodyType: string) {
+  const normalized = model.Model_Name.toLowerCase();
+
+  if (includesAny(normalized, ELECTRIC_WORDS)) {
+    return {
+      type: "Battery-electric motor",
+      capacity: "Electric drive, battery size varies by variant",
+      cylinders: "Not applicable",
+      power: "Variant-specific electric output",
+      torque: "Instant electric torque, variant-specific",
+      emission: "Zero tailpipe emission",
+    };
   }
 
-  return "5 seats";
+  if (includesAny(normalized, HYBRID_WORDS)) {
+    return {
+      type: "Petrol hybrid powertrain",
+      capacity: "Hybrid petrol engine, capacity varies by variant",
+      cylinders: "3 / 4 cylinders depending on variant",
+      power: "Variant-specific combined output",
+      torque: "Variant-specific petrol and electric assist torque",
+      emission: "BS VI",
+    };
+  }
+
+  if (isPremiumMake(model.Make_Name)) {
+    return {
+      type: "Turbo petrol / diesel depending on variant",
+      capacity: bodyType === "SUV" ? "2.0 L to 3.0 L class" : "2.0 L class",
+      cylinders: "4 / 6 cylinders depending on variant",
+      power: "Variant-specific output",
+      torque: "Variant-specific torque",
+      emission: "BS VI",
+    };
+  }
+
+  return {
+    type: "Petrol / CNG where available",
+    capacity: bodyType === "SUV" ? "1.0 L to 2.0 L class" : "0.8 L to 1.5 L class",
+    cylinders: "3 / 4 cylinders depending on variant",
+    power: "Variant-specific output",
+    torque: "Variant-specific torque",
+    emission: "BS VI",
+  };
+}
+
+function getGeneratedFuelAndMileage(model: VehicleModel) {
+  const normalized = model.Model_Name.toLowerCase();
+
+  if (includesAny(normalized, ELECTRIC_WORDS)) {
+    return {
+      fuelType: "Electric",
+      mileage: "Driving range varies by battery pack and variant",
+      fuelTank: "Battery pack, fuel tank not applicable",
+      transmission: "Single-speed automatic",
+    };
+  }
+
+  if (includesAny(normalized, HYBRID_WORDS)) {
+    return {
+      fuelType: "Petrol hybrid",
+      mileage: "Hybrid efficiency varies by variant and test cycle",
+      fuelTank: "Variant-specific fuel tank",
+      transmission: "Automatic / e-CVT depending on variant",
+    };
+  }
+
+  return {
+    fuelType: isPremiumMake(model.Make_Name)
+      ? "Petrol / diesel depending on variant"
+      : "Petrol / CNG where available",
+    mileage: "Mileage varies by engine, gearbox, and variant",
+    fuelTank: "Variant-specific fuel tank",
+    transmission: getTransmission(model.Model_Name),
+  };
+}
+
+function getGeneratedDimensions(bodyType: string, premium: boolean) {
+  if (bodyType === "MPV") {
+    return {
+      length: premium ? "Around 5100 mm" : "Around 4300 mm to 4800 mm",
+      width: premium ? "Around 1900 mm" : "Around 1700 mm to 1850 mm",
+      height: premium ? "Around 1900 mm" : "Around 1650 mm to 1800 mm",
+      wheelbase: premium ? "Around 3200 mm" : "Around 2750 mm to 3000 mm",
+      groundClearance: "Variant-specific",
+      bootSpace: "Flexible boot space with rear seats folded",
+      seatingCapacity: premium ? "6 / 7 seats depending on variant" : "6 / 7 seats",
+      turningRadius: "Variant-specific",
+    };
+  }
+
+  if (bodyType === "SUV") {
+    return {
+      length: premium ? "Around 4400 mm to 5200 mm" : "Around 3900 mm to 4700 mm",
+      width: premium ? "Around 1850 mm to 2000 mm" : "Around 1750 mm to 1900 mm",
+      height: premium ? "Around 1600 mm to 1800 mm" : "Around 1600 mm to 1750 mm",
+      wheelbase: premium ? "Around 2700 mm to 3100 mm" : "Around 2500 mm to 2850 mm",
+      groundClearance: "SUV-style ground clearance, variant-specific",
+      bootSpace: "Variant-specific boot space",
+      seatingCapacity: "5 seats, 7 seats on selected larger variants",
+      turningRadius: "Variant-specific",
+    };
+  }
+
+  if (bodyType === "Sedan") {
+    return {
+      length: premium ? "Around 4500 mm to 5300 mm" : "Around 3900 mm to 4600 mm",
+      width: premium ? "Around 1800 mm to 1950 mm" : "Around 1650 mm to 1800 mm",
+      height: premium ? "Around 1400 mm to 1550 mm" : "Around 1450 mm to 1550 mm",
+      wheelbase: premium ? "Around 2800 mm to 3200 mm" : "Around 2450 mm to 2700 mm",
+      groundClearance: "Variant-specific",
+      bootSpace: "Variant-specific boot space",
+      seatingCapacity: "5 seats",
+      turningRadius: "Variant-specific",
+    };
+  }
+
+  return {
+    length: "Around 3500 mm to 4000 mm",
+    width: "Around 1600 mm to 1750 mm",
+    height: "Around 1450 mm to 1650 mm",
+    wheelbase: "Around 2400 mm to 2550 mm",
+    groundClearance: "Variant-specific",
+    bootSpace: "Variant-specific boot space",
+    seatingCapacity: "5 seats",
+    turningRadius: "Variant-specific",
+  };
+}
+
+function getGeneratedSpecification(model: VehicleModel) {
+  const bodyType = getBodyType(model.Model_Name);
+  const premium = isPremiumMake(model.Make_Name);
+
+  return {
+    bodyType,
+    engine: getGeneratedEngine(model, bodyType),
+    fuelAndMileage: getGeneratedFuelAndMileage(model),
+    dimensions: getGeneratedDimensions(bodyType, premium),
+    safety: premium
+      ? [
+          "Multiple airbags depending on variant",
+          "ABS with EBD",
+          "Electronic stability control",
+          "Parking camera and sensors depending on variant",
+          "Advanced driver assistance features on selected variants",
+        ]
+      : [
+          "Airbags depending on variant",
+          "ABS with EBD",
+          "Electronic stability control on selected variants",
+          "Rear parking sensors",
+          "Rear camera on selected variants",
+        ],
+    comfortAndFeatures: premium
+      ? [
+          "Touchscreen infotainment",
+          "Connected car features depending on variant",
+          "Automatic climate control",
+          "Premium audio on selected variants",
+          "Leatherette or leather upholstery depending on variant",
+          "Sunroof or panoramic roof on selected variants",
+        ]
+      : [
+          "Touchscreen infotainment on selected variants",
+          "Manual or automatic climate control depending on variant",
+          "Steering-mounted controls",
+          "Connected car features on selected variants",
+          "Alloy wheels on selected variants",
+        ],
+    variants: ["Base variant", "Mid variant", "Top variant", "Automatic variants where available"],
+    isExact: false,
+  };
 }
 
 function DetailItem({ label, value }: { label: string; value: string }) {
@@ -136,22 +331,18 @@ function BulletList({ items }: { items: string[] }) {
 export function CarSpecifications({ model }: CarSpecificationsProps) {
   const accent = getMakeAccent(model.Make_ID);
   const specification = getCarSpecification(model);
+  const generatedSpecification = getGeneratedSpecification(model);
+  const displaySpecification = specification
+    ? { ...specification, isExact: true }
+    : generatedSpecification;
   const [freeDetails, setFreeDetails] = useState<FreeVehicleDetails | null>(null);
   const [isLoadingFreeDetails, setIsLoadingFreeDetails] = useState(false);
-  const bodyType = getBodyType(model.Model_Name);
-  const summarySpecs = specification
-    ? [
-        ["Body type", specification.bodyType],
-        ["Fuel type", specification.fuelAndMileage.fuelType],
-        ["Mileage", specification.fuelAndMileage.mileage],
-        ["Seating", specification.dimensions.seatingCapacity],
-      ]
-    : [
-        ["Body type", bodyType],
-        ["Fuel / powertrain", getPowertrain(model.Model_Name)],
-        ["Transmission", getTransmission(model.Model_Name)],
-        ["Seating", getSeating(bodyType)],
-      ];
+  const summarySpecs = [
+    ["Body type", displaySpecification.bodyType],
+    ["Fuel type", displaySpecification.fuelAndMileage.fuelType],
+    ["Transmission", displaySpecification.fuelAndMileage.transmission],
+    ["Seating", displaySpecification.dimensions.seatingCapacity],
+  ];
 
   useEffect(() => {
     const controller = new AbortController();
@@ -203,6 +394,7 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
             alt={`${model.Make_Name} ${model.Model_Name}`}
             className="absolute inset-0 h-full w-full object-cover"
             priority
+            loadRemoteImage={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 text-white sm:bottom-6 sm:left-6 sm:right-6">
@@ -257,81 +449,79 @@ export function CarSpecifications({ model }: CarSpecificationsProps) {
         </div>
       </div>
 
-      {specification ? (
-        <div className="grid gap-6 border-t border-zinc-200 p-4 sm:p-6 lg:grid-cols-2 lg:p-7">
-          <div>
-            <h4 className="text-lg font-bold text-zinc-950">Engine</h4>
-            <dl className="mt-4 grid grid-cols-2 gap-3">
-              <DetailItem label="Engine type" value={specification.engine.type} />
-              <DetailItem label="Capacity" value={specification.engine.capacity} />
-              <DetailItem label="Cylinders" value={specification.engine.cylinders} />
-              <DetailItem label="Emission" value={specification.engine.emission} />
-              <DetailItem label="Power" value={specification.engine.power} />
-              <DetailItem label="Torque" value={specification.engine.torque} />
-            </dl>
-          </div>
-
-          <div>
-            <h4 className="text-lg font-bold text-zinc-950">Mileage & Capacity</h4>
-            <dl className="mt-4 grid grid-cols-2 gap-3">
-              <DetailItem label="Mileage" value={specification.fuelAndMileage.mileage} />
-              <DetailItem label="Transmission" value={specification.fuelAndMileage.transmission} />
-              <DetailItem label="Fuel tank" value={specification.fuelAndMileage.fuelTank} />
-              <DetailItem label="Boot space" value={specification.dimensions.bootSpace} />
-              <DetailItem label="Seats" value={specification.dimensions.seatingCapacity} />
-              <DetailItem label="Turning radius" value={specification.dimensions.turningRadius} />
-            </dl>
-          </div>
-
-          <div>
-            <h4 className="text-lg font-bold text-zinc-950">Dimensions</h4>
-            <dl className="mt-4 grid grid-cols-2 gap-3">
-              <DetailItem label="Length" value={specification.dimensions.length} />
-              <DetailItem label="Width" value={specification.dimensions.width} />
-              <DetailItem label="Height" value={specification.dimensions.height} />
-              <DetailItem label="Wheelbase" value={specification.dimensions.wheelbase} />
-              <DetailItem
-                label="Ground clearance"
-                value={specification.dimensions.groundClearance}
-              />
-            </dl>
-          </div>
-
-          <div>
-            <h4 className="text-lg font-bold text-zinc-950">Safety</h4>
-            <BulletList items={specification.safety} />
-
-            <h4 className="mt-6 text-lg font-bold text-zinc-950">Comfort & Features</h4>
-            <BulletList items={specification.comfortAndFeatures} />
-          </div>
-
-          <div className="lg:col-span-2">
-            <h4 className="text-lg font-bold text-zinc-950">Variants</h4>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {specification.variants.map((variant) => (
-                <span
-                  key={variant}
-                  className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold text-zinc-700"
-                >
-                  {variant}
-                </span>
-              ))}
-            </div>
-            <p className="mt-5 text-sm leading-6 text-zinc-500">
-              Source: official brand specification page, updated {specification.lastUpdated}.
-              {specification.sourceUrl ? ` ${specification.sourceUrl}` : ""}
-            </p>
-          </div>
+      <div className="grid gap-6 border-t border-zinc-200 p-4 sm:p-6 lg:grid-cols-2 lg:p-7">
+        <div>
+          <h4 className="text-lg font-bold text-zinc-950">Engine</h4>
+          <dl className="mt-4 grid grid-cols-2 gap-3">
+            <DetailItem label="Engine type" value={displaySpecification.engine.type} />
+            <DetailItem label="Capacity" value={displaySpecification.engine.capacity} />
+            <DetailItem label="Cylinders" value={displaySpecification.engine.cylinders} />
+            <DetailItem label="Emission" value={displaySpecification.engine.emission} />
+            <DetailItem label="Power" value={displaySpecification.engine.power} />
+            <DetailItem label="Torque" value={displaySpecification.engine.torque} />
+          </dl>
         </div>
-      ) : (
-        <div className="border-t border-zinc-200 p-4 sm:p-6 lg:p-7">
-          <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-5 text-sm leading-6 text-zinc-600">
-            Detailed buyer specifications for {model.Make_Name} {model.Model_Name} are not
-            added yet. The panel is ready for exact ex-showroom price, engine,
-            mileage, seating capacity, safety, variants, dimensions, and feature data.
+
+        <div>
+          <h4 className="text-lg font-bold text-zinc-950">Mileage & Capacity</h4>
+          <dl className="mt-4 grid grid-cols-2 gap-3">
+            <DetailItem label="Mileage" value={displaySpecification.fuelAndMileage.mileage} />
+            <DetailItem
+              label="Transmission"
+              value={displaySpecification.fuelAndMileage.transmission}
+            />
+            <DetailItem label="Fuel tank" value={displaySpecification.fuelAndMileage.fuelTank} />
+            <DetailItem label="Boot space" value={displaySpecification.dimensions.bootSpace} />
+            <DetailItem label="Passengers" value={displaySpecification.dimensions.seatingCapacity} />
+            <DetailItem
+              label="Turning radius"
+              value={displaySpecification.dimensions.turningRadius}
+            />
+          </dl>
+        </div>
+
+        <div>
+          <h4 className="text-lg font-bold text-zinc-950">Dimensions</h4>
+          <dl className="mt-4 grid grid-cols-2 gap-3">
+            <DetailItem label="Length" value={displaySpecification.dimensions.length} />
+            <DetailItem label="Width" value={displaySpecification.dimensions.width} />
+            <DetailItem label="Height" value={displaySpecification.dimensions.height} />
+            <DetailItem label="Wheelbase" value={displaySpecification.dimensions.wheelbase} />
+            <DetailItem
+              label="Ground clearance"
+              value={displaySpecification.dimensions.groundClearance}
+            />
+          </dl>
+        </div>
+
+        <div>
+          <h4 className="text-lg font-bold text-zinc-950">Safety</h4>
+          <BulletList items={displaySpecification.safety} />
+
+          <h4 className="mt-6 text-lg font-bold text-zinc-950">Comfort & Features</h4>
+          <BulletList items={displaySpecification.comfortAndFeatures} />
+        </div>
+
+        <div className="lg:col-span-2">
+          <h4 className="text-lg font-bold text-zinc-950">Variants</h4>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {displaySpecification.variants.map((variant) => (
+              <span
+                key={variant}
+                className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold text-zinc-700"
+              >
+                {variant}
+              </span>
+            ))}
+          </div>
+          <p className="mt-5 text-sm leading-6 text-zinc-500">
+            {displaySpecification.isExact && specification
+              ? `Source: official brand specification page, updated ${specification.lastUpdated}.`
+              : "Overview based on body style, powertrain, and India-market catalog data. Exact variant specifications can differ by trim and city."}
+            {specification?.sourceUrl ? ` ${specification.sourceUrl}` : ""}
           </p>
         </div>
-      )}
+      </div>
 
       <div className="border-t border-zinc-200 p-4 sm:p-6 lg:p-7">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
