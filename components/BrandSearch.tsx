@@ -7,7 +7,7 @@ import Link from "next/link";
 import { BrandCard } from "@/components/BrandCard";
 import { CarPhoto } from "@/components/CarPhoto";
 import { INDIA_CAR_MODELS } from "@/data/indiaCars";
-import { getMakeAccent, type VehicleMake } from "@/lib/nhtsa";
+import { getMakeAccent, getModelSlug, type VehicleMake } from "@/lib/nhtsa";
 
 type BrandSearchProps = {
   makes: VehicleMake[];
@@ -79,7 +79,7 @@ export function BrandSearch({ makes }: BrandSearchProps) {
               return (
                 <Link
                   key={model.Model_ID}
-                  href={`/cars/${model.Model_ID}`}
+                  href={`/cars/${getModelSlug(model)}`}
                   className="group flex items-center gap-3 overflow-hidden rounded-lg border border-zinc-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300 sm:gap-4"
                   style={{ "--model-accent": accent } as CSSProperties}
                 >

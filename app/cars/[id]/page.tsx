@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SingleCarDetails } from "@/components/SingleCarDetails";
-import { getAllModels, getModelById } from "@/lib/nhtsa";
+import { getAllModels, getModelBySlugOrId, getModelSlug } from "@/lib/nhtsa";
 
 type CarDetailPageProps = {
   params: Promise<{
@@ -13,7 +13,7 @@ export async function generateStaticParams() {
   const models = await getAllModels();
 
   return models.map((model) => ({
-    id: String(model.Model_ID),
+    id: getModelSlug(model),
   }));
 }
 
@@ -21,15 +21,7 @@ export async function generateMetadata({
   params,
 }: CarDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const modelId = Number(id);
-
-  if (!Number.isInteger(modelId)) {
-    return {
-      title: "Car Not Found",
-    };
-  }
-
-  const model = await getModelById(modelId);
+  const model = await getModelBySlugOrId(id);
 
   if (!model) {
     return {
@@ -45,13 +37,7 @@ export async function generateMetadata({
 
 export default async function CarDetailPage({ params }: CarDetailPageProps) {
   const { id } = await params;
-  const modelId = Number(id);
-
-  if (!Number.isInteger(modelId)) {
-    notFound();
-  }
-
-  const model = await getModelById(modelId);
+  const model = await getModelBySlugOrId(id);
 
   if (!model) {
     notFound();

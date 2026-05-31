@@ -35,6 +35,26 @@ export async function getModelById(modelId: number) {
   return INDIA_CAR_MODELS.find((model) => model.Model_ID === modelId);
 }
 
+export function getModelSlug(model: VehicleModel) {
+  return `${model.Make_Name}-${model.Model_Name}`
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export async function getModelBySlugOrId(slugOrId: string) {
+  const modelId = Number(slugOrId);
+
+  if (Number.isInteger(modelId)) {
+    return getModelById(modelId);
+  }
+
+  const models = await getAllModels();
+
+  return models.find((model) => getModelSlug(model) === slugOrId);
+}
+
 export async function getAllModels() {
   return INDIA_CAR_MODELS;
 }

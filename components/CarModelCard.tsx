@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CarPhoto } from "@/components/CarPhoto";
-import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
+import { getMakeAccent, getModelSlug, type VehicleModel } from "@/lib/nhtsa";
 
 type CarModelCardProps = {
   model: VehicleModel;
@@ -13,7 +13,7 @@ export function CarModelCard({ model }: CarModelCardProps) {
 
   return (
     <Link
-      href={`/cars/${model.Model_ID}`}
+      href={`/cars/${getModelSlug(model)}`}
       className="group block overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300"
       style={{ "--model-accent": accent } as CSSProperties}
     >

@@ -8,6 +8,7 @@ type CarPhotoProps = {
   modelName: string;
   fallbackSrc: string;
   alt: string;
+  angle?: string;
   className?: string;
   priority?: boolean;
   loadRemoteImage?: boolean;
@@ -22,12 +23,20 @@ export function CarPhoto({
   modelName,
   fallbackSrc,
   alt,
+  angle,
   className,
   priority = false,
   loadRemoteImage = true,
 }: CarPhotoProps) {
-  const [src, setSrc] = useState(fallbackSrc);
-  const displaySrc = loadRemoteImage ? src : fallbackSrc;
+  const requestKey = `${makeName}|${modelName}|${angle ?? ""}|${fallbackSrc}`;
+  const [remoteImage, setRemoteImage] = useState({
+    key: requestKey,
+    src: fallbackSrc,
+  });
+  const displaySrc =
+    loadRemoteImage && remoteImage.key === requestKey
+      ? remoteImage.src
+      : fallbackSrc;
   const isSvgDataImage = displaySrc.startsWith("data:image/svg+xml");
 
   useEffect(() => {
@@ -40,6 +49,10 @@ export function CarPhoto({
       make: makeName,
       model: modelName,
     });
+
+    if (angle) {
+      params.set("angle", angle);
+    }
 
     async function loadImage() {
       try {
@@ -54,11 +67,11 @@ export function CarPhoto({
         const data = (await response.json()) as CarImageResponse;
 
         if (data.imageUrl) {
-          setSrc(data.imageUrl);
+          setRemoteImage({ key: requestKey, src: data.imageUrl });
         }
       } catch {
         if (!controller.signal.aborted) {
-          setSrc(fallbackSrc);
+          setRemoteImage({ key: requestKey, src: fallbackSrc });
         }
       }
     }
@@ -66,7 +79,7 @@ export function CarPhoto({
     loadImage();
 
     return () => controller.abort();
-  }, [fallbackSrc, loadRemoteImage, makeName, modelName]);
+  }, [angle, fallbackSrc, loadRemoteImage, makeName, modelName, requestKey]);
 
   if (isSvgDataImage) {
     return (
@@ -92,7 +105,7 @@ export function CarPhoto({
       priority={priority}
       onError={() => {
         if (loadRemoteImage) {
-          setSrc(fallbackSrc);
+          setRemoteImage({ key: requestKey, src: fallbackSrc });
         }
       }}
       unoptimized

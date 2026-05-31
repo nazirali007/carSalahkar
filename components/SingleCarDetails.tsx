@@ -61,9 +61,9 @@ export function SingleCarDetails({ model }: SingleCarDetailsProps) {
             modelName={model.Model_Name}
             fallbackSrc={galleryImages[0].url}
             alt={`${model.Make_Name} ${model.Model_Name} ${galleryImages[0].label}`}
+            angle={galleryImages[0].label}
             className="absolute inset-0 h-full w-full object-cover"
             priority
-            loadRemoteImage={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 text-white md:bottom-5 md:left-5 md:right-5">
@@ -87,8 +87,8 @@ export function SingleCarDetails({ model }: SingleCarDetailsProps) {
                 modelName={model.Model_Name}
                 fallbackSrc={image.url}
                 alt={`${model.Make_Name} ${model.Model_Name} ${image.label}`}
+                angle={image.label}
                 className="absolute inset-0 h-full w-full object-cover transition duration-300 hover:scale-105"
-                loadRemoteImage={false}
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-2 sm:p-3">
                 <p className="text-xs font-semibold text-white sm:text-sm">

@@ -64,6 +64,28 @@ function getModelAliases(model: string) {
   ]);
 }
 
+function getAngleAliases(angle: string) {
+  const normalized = angle.toLowerCase();
+
+  if (normalized.includes("side")) {
+    return ["side view", "profile", "side"];
+  }
+
+  if (normalized.includes("rear")) {
+    return ["rear", "rear view", "back"];
+  }
+
+  if (normalized.includes("studio")) {
+    return ["studio", "front", "official"];
+  }
+
+  if (normalized.includes("front")) {
+    return ["front", "front view", "three quarter"];
+  }
+
+  return [];
+}
+
 async function getWikipediaImage(make: string, model: string) {
   const titles = unique([
     ...getMakeAliases(make).flatMap((makeAlias) =>
@@ -103,8 +125,8 @@ async function getWikipediaImage(make: string, model: string) {
   return null;
 }
 
-async function getCommonsImage(make: string, model: string) {
-  const searches = unique([
+async function getCommonsImage(make: string, model: string, angle = "") {
+  const baseSearches = unique([
     ...getMakeAliases(make).flatMap((makeAlias) =>
       getModelAliases(model).flatMap((modelAlias) => [
         `${makeAlias} ${modelAlias}`,
@@ -113,6 +135,13 @@ async function getCommonsImage(make: string, model: string) {
       ]),
     ),
     `${model} car`,
+  ]);
+  const angleAliases = getAngleAliases(angle);
+  const searches = unique([
+    ...angleAliases.flatMap((angleAlias) =>
+      baseSearches.map((search) => `${search} ${angleAlias}`),
+    ),
+    ...baseSearches,
   ]);
 
   for (const search of searches) {
@@ -181,13 +210,16 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const make = cleanQueryPart(searchParams.get("make"));
   const model = cleanQueryPart(searchParams.get("model"));
+  const angle = cleanQueryPart(searchParams.get("angle"));
 
   if (!make || !model) {
     return jsonError("Both make and model are required.");
   }
 
   try {
-    const image = await getWikipediaImage(make, model) ?? await getCommonsImage(make, model);
+    const image = angle
+      ? await getCommonsImage(make, model, angle)
+      : await getWikipediaImage(make, model) ?? await getCommonsImage(make, model);
 
     if (!image) {
       return jsonError("No public image found for this model.", 404);
