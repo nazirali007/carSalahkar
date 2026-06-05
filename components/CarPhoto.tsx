@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type CarPhotoProps = {
   makeName: string;
   modelName: string;
+  src?: string;
   fallbackSrc: string;
   alt: string;
   angle?: string;
@@ -21,6 +21,7 @@ type CarImageResponse = {
 export function CarPhoto({
   makeName,
   modelName,
+  src,
   fallbackSrc,
   alt,
   angle,
@@ -28,19 +29,21 @@ export function CarPhoto({
   priority = false,
   loadRemoteImage = true,
 }: CarPhotoProps) {
-  const requestKey = `${makeName}|${modelName}|${angle ?? ""}|${fallbackSrc}`;
-  const [remoteImage, setRemoteImage] = useState({
+  const initialSrc = src ?? fallbackSrc;
+  const requestKey = `${makeName}|${modelName}|${angle ?? ""}|${initialSrc}|${fallbackSrc}`;
+  const [imageState, setImageState] = useState({
+    broken: false,
     key: requestKey,
-    src: fallbackSrc,
+    src: initialSrc,
   });
   const displaySrc =
-    loadRemoteImage && remoteImage.key === requestKey
-      ? remoteImage.src
-      : fallbackSrc;
-  const isSvgDataImage = displaySrc.startsWith("data:image/svg+xml");
+    imageState.key === requestKey
+      ? imageState.src
+      : initialSrc;
+  const showFallbackPanel = imageState.key === requestKey && imageState.broken;
 
   useEffect(() => {
-    if (!loadRemoteImage) {
+    if (src || !loadRemoteImage) {
       return;
     }
 
@@ -67,11 +70,11 @@ export function CarPhoto({
         const data = (await response.json()) as CarImageResponse;
 
         if (data.imageUrl) {
-          setRemoteImage({ key: requestKey, src: data.imageUrl });
+          setImageState({ broken: false, key: requestKey, src: data.imageUrl });
         }
       } catch {
         if (!controller.signal.aborted) {
-          setRemoteImage({ key: requestKey, src: fallbackSrc });
+          setImageState({ broken: false, key: requestKey, src: fallbackSrc });
         }
       }
     }
@@ -79,36 +82,40 @@ export function CarPhoto({
     loadImage();
 
     return () => controller.abort();
-  }, [angle, fallbackSrc, loadRemoteImage, makeName, modelName, requestKey]);
+  }, [angle, fallbackSrc, loadRemoteImage, makeName, modelName, requestKey, src]);
 
-  if (isSvgDataImage) {
+  if (showFallbackPanel) {
     return (
-      // SVG data previews are generated locally; a native image avoids next/image
-      // SVG handling edge cases while keeping the same layout classes.
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={displaySrc}
-        alt={alt}
-        className={className}
-        loading={priority ? "eager" : "lazy"}
-      />
+      <div
+        className={`${className ?? ""} grid place-items-center bg-zinc-200 text-center text-zinc-700`}
+        role="img"
+        aria-label={alt}
+      >
+        <span className="px-4 text-sm font-bold">
+          {makeName} {modelName}
+        </span>
+      </div>
     );
   }
 
   return (
-    <Image
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src={displaySrc}
       alt={alt}
-      fill
-      sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
       className={className}
-      priority={priority}
+      decoding="async"
+      draggable={false}
+      loading={priority ? "eager" : "lazy"}
       onError={() => {
-        if (loadRemoteImage) {
-          setRemoteImage({ key: requestKey, src: fallbackSrc });
+        if (displaySrc !== fallbackSrc) {
+          setImageState({ broken: false, key: requestKey, src: fallbackSrc });
+
+          return;
         }
+
+        setImageState({ broken: true, key: requestKey, src: fallbackSrc });
       }}
-      unoptimized
     />
   );
 }

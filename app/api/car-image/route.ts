@@ -76,14 +76,52 @@ function getAngleAliases(angle: string) {
   }
 
   if (normalized.includes("studio")) {
-    return ["studio", "front", "official"];
+    return ["front", "official"];
   }
 
-  if (normalized.includes("front")) {
-    return ["front", "front view", "three quarter"];
-  }
+  return ["front", "three quarter"];
+}
 
-  return [];
+function isAllowedImageTitle(title: string, model: string) {
+  const normalized = title.toLowerCase();
+  const blockedWords = [
+    "badge",
+    "emblem",
+    "logo",
+    "watermark",
+    "wordmark",
+  ];
+  const modelMatches = getModelAliases(model).some((alias) => {
+    const normalizedAlias = alias.toLowerCase();
+
+    return normalizedAlias.length > 1 && normalized.includes(normalizedAlias);
+  });
+
+  return modelMatches && !blockedWords.some((word) => normalized.includes(word));
+}
+
+function getSearches(make: string, model: string, angle: string) {
+  const baseSearches = unique([
+    ...getMakeAliases(make).flatMap((makeAlias) =>
+      getModelAliases(model).flatMap((modelAlias) => [
+        `${makeAlias} ${modelAlias} 2026`,
+        `${makeAlias} ${modelAlias} 2025`,
+        `${makeAlias} ${modelAlias} current model`,
+        `${makeAlias} ${modelAlias} facelift`,
+        `${makeAlias} ${modelAlias} car`,
+      ]),
+    ),
+    `${model} car 2026`,
+    `${model} car 2025`,
+  ]);
+  const angleAliases = getAngleAliases(angle);
+
+  return unique([
+    ...angleAliases.flatMap((angleAlias) =>
+      baseSearches.map((search) => `${search} ${angleAlias}`),
+    ),
+    ...baseSearches,
+  ]);
 }
 
 async function getWikipediaImage(make: string, model: string) {
@@ -125,36 +163,18 @@ async function getWikipediaImage(make: string, model: string) {
   return null;
 }
 
-async function getCommonsImage(make: string, model: string, angle = "") {
-  const baseSearches = unique([
-    ...getMakeAliases(make).flatMap((makeAlias) =>
-      getModelAliases(model).flatMap((modelAlias) => [
-        `${makeAlias} ${modelAlias}`,
-        `${makeAlias} ${modelAlias} car`,
-        `${makeAlias} ${modelAlias} automobile`,
-      ]),
-    ),
-    `${model} car`,
-  ]);
-  const angleAliases = getAngleAliases(angle);
-  const searches = unique([
-    ...angleAliases.flatMap((angleAlias) =>
-      baseSearches.map((search) => `${search} ${angleAlias}`),
-    ),
-    ...baseSearches,
-  ]);
-
-  for (const search of searches) {
+async function getCommonsImage(make: string, model: string, angle: string) {
+  for (const search of getSearches(make, model, angle)) {
     const params = new URLSearchParams({
       action: "query",
       format: "json",
       generator: "search",
       gsrnamespace: "6",
-      gsrlimit: "10",
+      gsrlimit: "12",
       gsrsearch: search,
       prop: "imageinfo",
       iiprop: "url",
-      iiurlwidth: "1200",
+      iiurlwidth: "1400",
       origin: "*",
     });
 
@@ -175,32 +195,20 @@ async function getCommonsImage(make: string, model: string, angle = "") {
     const data = (await response.json()) as CommonsSearchResponse;
     const pages = Object.values(data.query?.pages ?? {});
     const imagePage = pages.find((page) => {
-      const title = page.title?.toLowerCase() ?? "";
+      const title = page.title ?? "";
 
-      return (
-        page.imageinfo?.[0] &&
-        !title.includes("logo") &&
-        !title.includes("badge") &&
-        !title.includes("emblem")
-      );
+      return page.imageinfo?.[0] && isAllowedImageTitle(title, model);
     });
     const imageInfo = imagePage?.imageinfo?.[0];
+    const imageUrl = imageInfo?.thumburl ?? imageInfo?.url;
 
-    if (!imageInfo) {
-      continue;
+    if (imageUrl) {
+      return {
+        imageUrl,
+        sourceName: "Wikimedia Commons",
+        sourceUrl: imageInfo?.descriptionurl ?? "https://commons.wikimedia.org/",
+      };
     }
-
-    const imageUrl = imageInfo.thumburl ?? imageInfo.url;
-
-    if (!imageUrl) {
-      continue;
-    }
-
-    return {
-      imageUrl,
-      sourceName: "Wikimedia Commons",
-      sourceUrl: imageInfo.descriptionurl ?? "https://commons.wikimedia.org/",
-    };
   }
 
   return null;
@@ -217,12 +225,12 @@ export async function GET(request: Request) {
   }
 
   try {
-    const image = angle
-      ? await getCommonsImage(make, model, angle)
-      : await getWikipediaImage(make, model) ?? await getCommonsImage(make, model);
+    const image =
+      (await getWikipediaImage(make, model)) ??
+      (await getCommonsImage(make, model, angle));
 
     if (!image) {
-      return jsonError("No public image found for this model.", 404);
+      return jsonError("No unwatermarked public image found for this model.", 404);
     }
 
     return NextResponse.json(image);

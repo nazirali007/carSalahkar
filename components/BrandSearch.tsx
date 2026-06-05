@@ -90,7 +90,6 @@ export function BrandSearch({ makes }: BrandSearchProps) {
                       fallbackSrc={model.Image_URL}
                       alt={`${model.Make_Name} ${model.Model_Name}`}
                       className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                      loadRemoteImage={false}
                     />
                     <div className="absolute bottom-2 right-2 grid h-7 w-7 place-items-center overflow-hidden rounded-full bg-white shadow-sm">
                       <Image
