@@ -97,6 +97,28 @@ export function CarPhoto({
       </div>
     );
   }
+  // If the source is an inline SVG data URI we can decode and render it
+  // directly into the DOM. This avoids any browser issues with data URIs
+  // being blocked or failing to render in certain contexts.
+  if (displaySrc?.startsWith?.("data:image/svg+xml")) {
+    try {
+      const prefix = displaySrc.split(",")[0] + ",";
+      const encoded = displaySrc.slice(prefix.length);
+      const svg = decodeURIComponent(encoded);
+
+      return (
+        <div
+          className={className}
+          role="img"
+          aria-label={alt}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
+      );
+    } catch {
+      // Fall back to <img> if decoding fails
+    }
+  }
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
