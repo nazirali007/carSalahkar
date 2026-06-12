@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CarPhoto } from "@/components/CarPhoto";
 import { CarSpecifications } from "@/components/CarSpecifications";
+import { useState } from "react";
 import { getCarImageGallery } from "@/data/indiaCars";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
@@ -13,6 +14,7 @@ type SingleCarDetailsProps = {
 export function SingleCarDetails({ model }: SingleCarDetailsProps) {
   const accent = getMakeAccent(model.Make_ID);
   const galleryImages = getCarImageGallery(model.Make_Name, model.Model_Name);
+  const [selectedImage, setSelectedImage] = useState(galleryImages[0]);
 
   return (
     <section style={{ "--car-accent": accent } as CSSProperties}>
@@ -59,9 +61,9 @@ export function SingleCarDetails({ model }: SingleCarDetailsProps) {
           <CarPhoto
             makeName={model.Make_Name}
             modelName={model.Model_Name}
-            fallbackSrc={galleryImages[0].url}
-            alt={`${model.Make_Name} ${model.Model_Name} ${galleryImages[0].label}`}
-            angle={galleryImages[0].label}
+            fallbackSrc={selectedImage.url}
+            alt={`${model.Make_Name} ${model.Model_Name} ${selectedImage.label}`}
+            angle={selectedImage.label}
             className="absolute inset-0 h-full w-full object-cover"
             priority
           />
@@ -80,7 +82,13 @@ export function SingleCarDetails({ model }: SingleCarDetailsProps) {
           {galleryImages.slice(1).map((image) => (
             <div
               key={image.label}
-              className="relative min-h-28 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100 shadow-sm sm:min-h-36"
+              role="button"
+              tabIndex={0}
+              onClick={() => setSelectedImage(image)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") setSelectedImage(image);
+              }}
+              className={`relative min-h-28 overflow-hidden rounded-lg border bg-zinc-100 shadow-sm sm:min-h-36 cursor-pointer transition-all duration-150 ${selectedImage.url === image.url ? "border-zinc-950" : "border-zinc-200"}`}
             >
               <CarPhoto
                 makeName={model.Make_Name}
