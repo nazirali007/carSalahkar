@@ -6,17 +6,32 @@ import { getMakeAccent, getModelSlug, type VehicleModel } from "@/lib/nhtsa";
 
 type CarModelCardProps = {
   model: VehicleModel;
+  isSelected?: boolean;
+  onSelect?: (model: VehicleModel) => void;
 };
 
-export function CarModelCard({ model }: CarModelCardProps) {
+export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCardProps) {
   const accent = getMakeAccent(model.Make_ID);
+  const commonProps = {
+    style: { "--model-accent": accent } as CSSProperties,
+    className: `group block overflow-hidden rounded-lg border ${isSelected ? "border-zinc-950" : "border-zinc-200"} bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300`,
+  };
+
+  const Wrapper: any = onSelect ? "div" : Link;
+  const wrapperProps: any = onSelect
+    ? {
+        role: "button",
+        tabIndex: 0,
+        onClick: () => onSelect?.(model),
+        onKeyDown: (e: React.KeyboardEvent) => {
+          if (e.key === "Enter" || e.key === " ") onSelect?.(model);
+        },
+        ...commonProps,
+      }
+    : { href: `/cars/${getModelSlug(model)}`, ...commonProps };
 
   return (
-    <Link
-      href={`/cars/${getModelSlug(model)}`}
-      className="group block overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300"
-      style={{ "--model-accent": accent } as CSSProperties}
-    >
+    <Wrapper {...wrapperProps}>
       <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
         <CarPhoto
           makeName={model.Make_Name}
@@ -82,6 +97,6 @@ export function CarModelCard({ model }: CarModelCardProps) {
           />
         </div>
       </div>
-    </Link>
+    </Wrapper>
   );
 }
