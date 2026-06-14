@@ -15,7 +15,10 @@ type SingleCarDetailsProps = {
 
 export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { isModal?: boolean }) {
   const accent = getMakeAccent(model.Make_ID);
-  const galleryImages = getCarImageGallery(model.Make_Name, model.Model_Name);
+  const galleryImages = [
+    { label: "Official Photo", url: model.Image_URL },
+    ...getCarImageGallery(model.Make_Name, model.Model_Name)
+  ];
   const [selectedImage, setSelectedImage] = useState(galleryImages[0]);
 
   return (
@@ -70,6 +73,7 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
             angle={selectedImage.label}
             className="absolute inset-0 h-full w-full object-cover"
             priority
+            loadRemoteImage={selectedImage.label !== "Official Photo"}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 text-white md:bottom-5 md:left-5 md:right-5">
@@ -77,7 +81,7 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
               Gallery
             </p>
             <h2 className="mt-2 text-xl font-bold md:text-2xl">
-              {galleryImages[0].label}
+              {selectedImage.label}
             </h2>
           </div>
         </div>
@@ -101,6 +105,7 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
                 alt={`${model.Make_Name} ${model.Model_Name} ${image.label}`}
                 angle={image.label}
                 className="absolute inset-0 h-full w-full object-cover transition duration-300 hover:scale-105"
+                loadRemoteImage={image.label !== "Official Photo"}
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-2 sm:p-3">
                 <p className="text-xs font-semibold text-white sm:text-sm">
