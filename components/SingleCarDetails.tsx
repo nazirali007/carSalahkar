@@ -1,3 +1,5 @@
+"use client";
+
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +13,7 @@ type SingleCarDetailsProps = {
   model: VehicleModel;
 };
 
-export function SingleCarDetails({ model }: SingleCarDetailsProps) {
+export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { isModal?: boolean }) {
   const accent = getMakeAccent(model.Make_ID);
   const galleryImages = getCarImageGallery(model.Make_Name, model.Model_Name);
   const [selectedImage, setSelectedImage] = useState(galleryImages[0]);
@@ -20,12 +22,14 @@ export function SingleCarDetails({ model }: SingleCarDetailsProps) {
     <section style={{ "--car-accent": accent } as CSSProperties}>
       <div className="grid gap-5 border-b border-zinc-200 pb-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:pb-8">
         <div>
-          <Link
-            href={`/brands/${model.Make_ID}`}
-            className="inline-flex rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-bold text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300"
-          >
-            Back to {model.Make_Name} models
-          </Link>
+          {!isModal && (
+            <Link
+              href={`/brands/${model.Make_ID}`}
+              className="inline-flex rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-bold text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300"
+            >
+              Back to {model.Make_Name} models
+            </Link>
+          )}
           <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500 md:mt-8">
             Car details
           </p>
