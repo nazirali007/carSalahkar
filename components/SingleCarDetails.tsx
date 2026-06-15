@@ -86,8 +86,8 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-4">
-          {galleryImages.slice(1).map((image) => (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-1 lg:gap-4">
+          {galleryImages.filter((image) => image.url !== selectedImage.url).map((image) => (
             <div
               key={image.label}
               role="button"
