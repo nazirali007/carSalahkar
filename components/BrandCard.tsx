@@ -14,7 +14,7 @@ export function BrandCard({ make }: BrandCardProps) {
     <Link
       href={`/brands/${make.Make_ID}`}
       aria-label={`View ${make.Make_Name} models`}
-      className="group relative grid gap-4 overflow-hidden rounded-lg border border-zinc-200 bg-white p-4 shadow-sm outline-none transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:ring-4 focus-visible:ring-zinc-300 md:min-h-56 md:p-5"
+      className="group relative grid gap-4 overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/80 backdrop-blur-sm p-4 shadow-sm outline-none transition-all duration-300 hover:-translate-y-1.5 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/50 hover:bg-white focus-visible:ring-4 focus-visible:ring-zinc-300 md:min-h-56 md:p-5"
       style={{ "--brand-accent": accent } as CSSProperties}
     >
       <div

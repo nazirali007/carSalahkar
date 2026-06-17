@@ -45,26 +45,37 @@ export function BrandSearch({ makes }: BrandSearchProps) {
   }, [search]);
 
   return (
-    <section className="mt-8 md:mt-10">
-      <div className="sticky top-[65px] z-30 -mx-4 border-y border-zinc-200 bg-zinc-50/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 md:static md:mx-auto md:max-w-3xl md:border-0 md:bg-transparent md:p-0">
+    <section className="w-full">
+      <div className="sticky top-[65px] z-30 -mx-4 border-y border-zinc-200 bg-white/80 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 md:static md:mx-0 md:w-full md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
         <label
           htmlFor="brand-search"
           className="mb-3 block text-sm font-semibold text-zinc-700"
         >
           Search car company or model
         </label>
-        <input
-          id="brand-search"
-          type="search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by company or car model"
-          className="h-12 w-full rounded-lg border border-zinc-300 bg-white px-4 text-base text-zinc-950 shadow-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-950 focus:ring-4 focus:ring-zinc-200 md:h-14"
-        />
-        <p className="mt-3 text-sm text-zinc-500 md:text-center">
-          Showing {filteredMakes.length} of {makes.length} companies
-          {search.trim() ? ` and ${matchingModels.length} matching models` : ""}
-        </p>
+        <div className="relative group">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <svg className="h-6 w-6 text-zinc-400 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input
+            id="brand-search"
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search by company or car model"
+            className="h-14 md:h-16 w-full rounded-2xl border-2 border-zinc-200 bg-white/50 backdrop-blur-sm pl-12 pr-4 text-lg text-zinc-950 shadow-sm outline-none transition-all placeholder:text-zinc-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/20"
+          />
+        </div>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-sm text-zinc-500">
+          <p>
+            Showing <span className="font-semibold text-zinc-700">{filteredMakes.length}</span> of {makes.length} companies
+            {search.trim() ? (
+              <span> and <span className="font-semibold text-zinc-700">{matchingModels.length}</span> matching models</span>
+            ) : ""}
+          </p>
+        </div>
       </div>
 
       {matchingModels.length > 0 ? (
@@ -80,7 +91,7 @@ export function BrandSearch({ makes }: BrandSearchProps) {
                 <Link
                   key={model.Model_ID}
                   href={`/cars/${getModelSlug(model)}`}
-                  className="group flex items-center gap-3 overflow-hidden rounded-lg border border-zinc-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300 sm:gap-4"
+                  className="group flex items-center gap-3 overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-zinc-300 hover:shadow-md hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300 sm:gap-4"
                   style={{ "--model-accent": accent } as CSSProperties}
                 >
                   <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-md bg-zinc-100 sm:w-28">
