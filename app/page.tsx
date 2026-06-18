@@ -11,7 +11,7 @@ export default async function Home() {
       <div className="absolute top-0 -right-40 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob animation-delay-2000 pointer-events-none"></div>
       <div className="absolute -bottom-40 left-1/2 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob animation-delay-4000 pointer-events-none transform -translate-x-1/2"></div>
 
-      <div className="relative z-10 px-4 py-16 sm:px-6 md:py-24 lg:px-8 flex-1 flex flex-col items-center">
+      <div className="relative z-10 px-4 pb-16 pt-4 sm:px-6 md:pb-24 lg:px-8 flex-1 flex flex-col items-center">
         <div className="mx-auto max-w-5xl w-full">
           {/* Custom Hero Section */}
           <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">

@@ -46,7 +46,7 @@ export function BrandSearch({ makes }: BrandSearchProps) {
 
   return (
     <section className="w-full">
-      <div className="sticky top-[65px] z-30 -mx-4 border-y border-zinc-200 bg-white/80 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 md:static md:mx-0 md:w-full md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
+      <div className="sticky top-[90px] z-30 -mx-4 border-y border-zinc-200 bg-white/80 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 md:static md:mx-0 md:w-full md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
         <label
           htmlFor="brand-search"
           className="mb-3 block text-sm font-semibold text-zinc-700"
