@@ -3,11 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { CarPhoto } from "@/components/CarPhoto";
 import { getMakeAccent, getModelSlug, type VehicleModel } from "@/lib/nhtsa";
-
+ 
+interface VehicleModelWithHistory extends VehicleModel {
+  history?: {
+    year: number;
+    images: string[];
+  }[];
+}
+ 
 type CarModelCardProps = {
-  model: VehicleModel;
+  model: VehicleModelWithHistory;
   isSelected?: boolean;
-  onSelect?: (model: VehicleModel) => void;
+  onSelect?: (model: VehicleModelWithHistory) => void;
 };
 
 export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCardProps) {
@@ -25,7 +32,7 @@ export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCa
       return latestEntry.images && latestEntry.images.length > 0 ? latestEntry.images[0] : model.Image_URL;
     }
     return model.Image_URL;
-  }, [model.history, model.Image_URL]);
+  }, [model]);
   const accent = getMakeAccent(model.Make_ID);
   const commonProps = {
     style: { "--model-accent": accent } as CSSProperties,
