@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useMemo, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CarPhoto } from "@/components/CarPhoto";
@@ -11,6 +11,21 @@ type CarModelCardProps = {
 };
 
 export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCardProps) {
+  // To ensure the main card displays the image of the latest model,
+  // we assume the `model` object might contain a `history` array,
+  // similar to the structure found in `jsonData/StaticCarData.js`.
+  // If the `VehicleModel` type (from `@/lib/nhtsa`) does not explicitly
+  // include `history`, this logic will safely fall back to `model.Image_URL`.
+  const latestImageUrl = useMemo(() => {
+    if (model.history && Array.isArray(model.history) && model.history.length > 0) {
+      // Sort history by year in descending order to find the latest entry
+      const sortedHistory = [...model.history].sort((a, b) => b.year - a.year);
+      const latestEntry = sortedHistory[0];
+      // Return the first image from the latest entry's images array, or fallback to model.Image_URL
+      return latestEntry.images && latestEntry.images.length > 0 ? latestEntry.images[0] : model.Image_URL;
+    }
+    return model.Image_URL;
+  }, [model.history, model.Image_URL]);
   const accent = getMakeAccent(model.Make_ID);
   const commonProps = {
     style: { "--model-accent": accent } as CSSProperties,
@@ -36,7 +51,7 @@ export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCa
         <CarPhoto
           makeName={model.Make_Name}
           modelName={model.Model_Name}
-          fallbackSrc={model.Image_URL}
+          fallbackSrc={latestImageUrl}
           alt={`${model.Make_Name} ${model.Model_Name}`}
           className="absolute inset-0 z-10 h-full w-full object-cover transition duration-500 group-hover:scale-105"
           loadRemoteImage={false}
