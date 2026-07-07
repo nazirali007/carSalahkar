@@ -14,16 +14,16 @@
     //     {"year": 2024, "fuelType": ["Petrol", "CNG"], "transmission": ["Manual", "AMT"], "price": {"exShowroomOriginalINR": 649000}, "engine": {"petrol": "1197 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false}
     //   ]
     // },
-    {
-      "model": "Swift",
-      "bodyType": "Hatchback",
-      "history": [
-        {"year": 2011, "fuelType": ["Petrol", "Diesel"], "transmission": ["Manual"], "price": {"exShowroomOriginalINR": 487000}, "engine": {"petrol": "1197 cc", "diesel": "1248 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false},
-        {"year": 2014, "fuelType": ["Petrol", "Diesel"], "transmission": ["Manual"], "price": {"exShowroomOriginalINR": 499000}, "engine": {"petrol": "1197 cc", "diesel": "1248 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false},
-        {"year": 2018, "fuelType": ["Petrol", "Diesel"], "transmission": ["Manual", "AMT"], "price": {"exShowroomOriginalINR": 499000}, "engine": {"petrol": "1197 cc", "diesel": "1248 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false},
-        {"year": 2024, "fuelType": ["Petrol", "CNG"], "transmission": ["Manual", "AMT"], "price": {"exShowroomOriginalINR": 649000}, "engine": {"petrol": "1197 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false}
-      ]
-    },
+    // {
+    //   "model": "Swift",
+    //   "bodyType": "Hatchback",
+    //   "history": [
+    //     {"year": 2011, "fuelType": ["Petrol", "Diesel"], "transmission": ["Manual"], "price": {"exShowroomOriginalINR": 487000}, "engine": {"petrol": "1197 cc", "diesel": "1248 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false},
+    //     {"year": 2014, "fuelType": ["Petrol", "Diesel"], "transmission": ["Manual"], "price": {"exShowroomOriginalINR": 499000}, "engine": {"petrol": "1197 cc", "diesel": "1248 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false},
+    //     {"year": 2018, "fuelType": ["Petrol", "Diesel"], "transmission": ["Manual", "AMT"], "price": {"exShowroomOriginalINR": 499000}, "engine": {"petrol": "1197 cc", "diesel": "1248 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false},
+    //     {"year": 2024, "fuelType": ["Petrol", "CNG"], "transmission": ["Manual", "AMT"], "price": {"exShowroomOriginalINR": 649000}, "engine": {"petrol": "1197 cc"}, "images": ["https://www.marutisuzuki.com"], "discontinued": false}
+    //   ]
+    // },
     {
       "model": "Dzire",
       "bodyType": "Sedan",
