@@ -58,7 +58,8 @@ export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCa
         <CarPhoto
           makeName={model.Make_Name}
           modelName={model.Model_Name}
-          fallbackSrc={latestImageUrl}
+          src={latestImageUrl}
+          fallbackSrc={model.Image_URL}
           alt={`${model.Make_Name} ${model.Model_Name}`}
           className="absolute inset-0 z-10 h-full w-full object-cover transition duration-500 group-hover:scale-105"
           loadRemoteImage={false}
