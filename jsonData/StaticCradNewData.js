@@ -195,13 +195,13 @@ const dummyCarData = [
     ],
   },
 
-  {
-    brand: "BYD",
-    market: "India",
-    models: [
-      { model: "Atto 3", bodyType: "Electric SUV", history: [] },
-      { model: "Seal", bodyType: "Electric Sedan", history: [] },
-      { model: "eMAX 7", bodyType: "Electric MPV", history: [] },
-    ],
-  },
+//   {
+//     brand: "BYD",
+//     market: "India",
+//     models: [
+//       { model: "Atto 3", bodyType: "Electric SUV", history: [] },
+//       { model: "Seal", bodyType: "Electric Sedan", history: [] },
+//       { model: "eMAX 7", bodyType: "Electric MPV", history: [] },
+//     ],
+//   },
 ];
