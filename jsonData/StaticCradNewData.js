@@ -205,3 +205,5 @@ const dummyCarData = [
 //     ],
 //   },
 ];
+
+export default dummyCarData;
