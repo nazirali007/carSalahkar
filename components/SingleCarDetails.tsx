@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CarPhoto } from "@/components/CarPhoto";
 import { CarSpecifications } from "@/components/CarSpecifications";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getCarImageGallery } from "@/data/indiaCars";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
@@ -15,11 +15,14 @@ type SingleCarDetailsProps = {
 
 export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { isModal?: boolean }) {
   const accent = getMakeAccent(model.Make_ID);
-  const galleryImages = [
-    { label: "Official Photo", url: model.Image_URL },
-    ...getCarImageGallery(model.Make_Name, model.Model_Name)
-  ];
-  const [selectedImage, setSelectedImage] = useState(galleryImages[0]);
+  const galleryImages = useMemo(
+    () => [
+      ...getCarImageGallery(model.Make_Name, model.Model_Name),
+      { label: "Official Photo", url: model.Image_URL },
+    ],
+    [model.Image_URL, model.Make_Name, model.Model_Name],
+  );
+  const [selectedImage, setSelectedImage] = useState(() => galleryImages[0]);
 
   return (
     <section style={{ "--car-accent": accent } as CSSProperties}>
@@ -68,12 +71,13 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
           <CarPhoto
             makeName={model.Make_Name}
             modelName={model.Model_Name}
+            src={selectedImage.url}
             fallbackSrc={selectedImage.url}
             alt={`${model.Make_Name} ${model.Model_Name} ${selectedImage.label}`}
             angle={selectedImage.label}
             className="absolute inset-0 h-full w-full object-cover"
             priority
-            loadRemoteImage={selectedImage.label !== "Official Photo"}
+            loadRemoteImage={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 text-white md:bottom-5 md:left-5 md:right-5">
@@ -101,11 +105,12 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
               <CarPhoto
                 makeName={model.Make_Name}
                 modelName={model.Model_Name}
+                src={image.url}
                 fallbackSrc={image.url}
                 alt={`${model.Make_Name} ${model.Model_Name} ${image.label}`}
                 angle={image.label}
                 className="absolute inset-0 h-full w-full object-cover transition duration-300 hover:scale-105"
-                loadRemoteImage={image.label !== "Official Photo"}
+                loadRemoteImage={false}
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-2 sm:p-3">
                 <p className="text-xs font-semibold text-white sm:text-sm">

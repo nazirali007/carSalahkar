@@ -32,7 +32,13 @@ export function CarModelExplorer({ models }: CarModelExplorerProps) {
         isOpen={selectedModelId !== null} 
         onClose={() => setSelectedModelId(null)}
       >
-        {selectedModel && <SingleCarDetails model={selectedModel} isModal={true} />}
+        {selectedModel && (
+          <SingleCarDetails
+            key={selectedModel.Model_ID}
+            model={selectedModel}
+            isModal={true}
+          />
+        )}
       </Modal>
     </section>
   );

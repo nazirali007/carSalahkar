@@ -97,42 +97,6 @@ export function CarPhoto({
       </div>
     );
   }
-  // If the source is an inline SVG data URI we can decode and render it
-  // directly into the DOM. This avoids any browser issues with data URIs
-  // being blocked or failing to render in certain contexts.
-  if (displaySrc?.startsWith?.("data:image/svg+xml")) {
-    try {
-      const prefix = displaySrc.split(",")[0] + ",";
-      const encoded = displaySrc.slice(prefix.length);
-      let svg = decodeURIComponent(encoded);
-
-      // Ensure the SVG fills its container like object-cover.
-      // If the svg tag doesn't already specify width/height/preserveAspectRatio,
-      // inject attributes so it scales to the parent wrapper.
-      svg = svg.replace(/<svg([^>]*)>/i, (match, attrs) => {
-        const hasWidth = /\bwidth=/.test(attrs);
-        const hasHeight = /\bheight=/.test(attrs);
-        const hasPreserve = /preserveAspectRatio=/.test(attrs);
-
-        const injected = `${hasWidth ? "" : ' width="100%"'}${hasHeight ? "" : ' height="100%"'}${hasPreserve ? "" : ' preserveAspectRatio="xMidYMid slice"'}`;
-
-        return `<svg${attrs}${injected}>`;
-      });
-
-      return (
-        <div
-          className={className}
-          role="img"
-          aria-label={alt}
-          style={{ width: "100%", height: "100%", overflow: "hidden" }}
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
-      );
-    } catch {
-      // Fall back to <img> if decoding fails
-    }
-  }
 
   return (
     // eslint-disable-next-line @next/next/no-img-element

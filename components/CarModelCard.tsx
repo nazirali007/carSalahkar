@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties } from "react";
+import { useMemo, type CSSProperties, type KeyboardEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CarPhoto } from "@/components/CarPhoto";
@@ -38,22 +38,8 @@ export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCa
     style: { "--model-accent": accent } as CSSProperties,
     className: `group block overflow-hidden rounded-lg border ${isSelected ? "border-zinc-950" : "border-zinc-200"} bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/80 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-300`,
   };
-
-  const Wrapper: any = onSelect ? "div" : Link;
-  const wrapperProps: any = onSelect
-    ? {
-        role: "button",
-        tabIndex: 0,
-        onClick: () => onSelect?.(model),
-        onKeyDown: (e: React.KeyboardEvent) => {
-          if (e.key === "Enter" || e.key === " ") onSelect?.(model);
-        },
-        ...commonProps,
-      }
-    : { href: `/cars/${getModelSlug(model)}`, ...commonProps };
-
-  return (
-    <Wrapper {...wrapperProps}>
+  const content = (
+    <>
       <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
         <CarPhoto
           makeName={model.Make_Name}
@@ -120,6 +106,28 @@ export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCa
           />
         </div>
       </div>
-    </Wrapper>
+    </>
+  );
+
+  if (onSelect) {
+    return (
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => onSelect(model)}
+        onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+          if (e.key === "Enter" || e.key === " ") onSelect(model);
+        }}
+        {...commonProps}
+      >
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link href={`/cars/${getModelSlug(model)}`} {...commonProps}>
+      {content}
+    </Link>
   );
 }
