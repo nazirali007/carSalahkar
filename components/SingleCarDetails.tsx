@@ -3,10 +3,9 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CarPhoto } from "@/components/CarPhoto";
 import { CarSpecifications } from "@/components/CarSpecifications";
 import { useMemo, useState } from "react";
-import { getCarImageGallery } from "@/data/indiaCars";
+import { CarPreview } from "@/components/CarPreview";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
 type SingleCarDetailsProps = {
@@ -17,10 +16,12 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
   const accent = getMakeAccent(model.Make_ID);
   const galleryImages = useMemo(
     () => [
-      ...getCarImageGallery(model.Make_Name, model.Model_Name),
-      { label: "Official Photo", url: model.Image_URL },
+      { label: "2026 front three-quarter", angle: "23" as const },
+      { label: "2026 side profile", angle: "09" as const },
+      { label: "2026 rear three-quarter", angle: "05" as const },
+      { label: "2026 studio front", angle: "01" as const },
     ],
-    [model.Image_URL, model.Make_Name, model.Model_Name],
+    [],
   );
   const [selectedImage, setSelectedImage] = useState(() => galleryImages[0]);
 
@@ -68,16 +69,12 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
 
       <div className="mt-6 grid gap-3 md:mt-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:gap-4">
         <div className="relative min-h-72 overflow-hidden rounded-lg bg-zinc-100 shadow-sm sm:min-h-[30rem]">
-          <CarPhoto
+          <CarPreview
             makeName={model.Make_Name}
             modelName={model.Model_Name}
-            src={selectedImage.url}
-            fallbackSrc={selectedImage.url}
             alt={`${model.Make_Name} ${model.Model_Name} ${selectedImage.label}`}
-            angle={selectedImage.label}
+            angle={selectedImage.angle}
             className="absolute inset-0 h-full w-full object-cover"
-            priority
-            loadRemoteImage={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 text-white md:bottom-5 md:left-5 md:right-5">
@@ -91,7 +88,7 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-1 lg:gap-4">
-          {galleryImages.filter((image) => image.url !== selectedImage.url).map((image) => (
+          {galleryImages.filter((image) => image.angle !== selectedImage.angle).map((image) => (
             <div
               key={image.label}
               role="button"
@@ -100,17 +97,14 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") setSelectedImage(image);
               }}
-              className={`relative min-h-28 overflow-hidden rounded-lg border bg-zinc-100 shadow-sm sm:min-h-36 cursor-pointer transition-all duration-150 ${selectedImage.url === image.url ? "border-zinc-950" : "border-zinc-200"}`}
+              className={`relative min-h-28 overflow-hidden rounded-lg border bg-zinc-100 shadow-sm sm:min-h-36 cursor-pointer transition-all duration-150 ${selectedImage.angle === image.angle ? "border-zinc-950" : "border-zinc-200"}`}
             >
-              <CarPhoto
+              <CarPreview
                 makeName={model.Make_Name}
                 modelName={model.Model_Name}
-                src={image.url}
-                fallbackSrc={image.url}
                 alt={`${model.Make_Name} ${model.Model_Name} ${image.label}`}
-                angle={image.label}
+                angle={image.angle}
                 className="absolute inset-0 h-full w-full object-cover transition duration-300 hover:scale-105"
-                loadRemoteImage={false}
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-2 sm:p-3">
                 <p className="text-xs font-semibold text-white sm:text-sm">
