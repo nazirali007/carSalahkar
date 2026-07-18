@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { CarSpecifications } from "@/components/CarSpecifications";
 import { useMemo, useState } from "react";
-import { CarPreview } from "@/components/CarPreview";
+import { CarPhoto } from "@/components/CarPhoto";
+import { getCarImageUrl } from "@/data/indiaCars";
 import { getMakeAccent, type VehicleModel } from "@/lib/nhtsa";
 
 type SingleCarDetailsProps = {
@@ -69,12 +70,14 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
 
       <div className="mt-6 grid gap-3 md:mt-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:gap-4">
         <div className="relative min-h-72 overflow-hidden rounded-lg bg-zinc-100 shadow-sm sm:min-h-[30rem]">
-          <CarPreview
+          <CarPhoto
             makeName={model.Make_Name}
             modelName={model.Model_Name}
+            fallbackSrc={getCarImageUrl(model.Make_Name, model.Model_Name, selectedImage.angle)}
             alt={`${model.Make_Name} ${model.Model_Name} ${selectedImage.label}`}
-            angle={selectedImage.angle}
             className="absolute inset-0 h-full w-full object-cover"
+            priority
+            loadRemoteImage
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 text-white md:bottom-5 md:left-5 md:right-5">
@@ -99,12 +102,13 @@ export function SingleCarDetails({ model, isModal }: SingleCarDetailsProps & { i
               }}
               className={`relative min-h-28 overflow-hidden rounded-lg border bg-zinc-100 shadow-sm sm:min-h-36 cursor-pointer transition-all duration-150 ${selectedImage.angle === image.angle ? "border-zinc-950" : "border-zinc-200"}`}
             >
-              <CarPreview
+              <CarPhoto
                 makeName={model.Make_Name}
                 modelName={model.Model_Name}
+                fallbackSrc={getCarImageUrl(model.Make_Name, model.Model_Name, image.angle)}
                 alt={`${model.Make_Name} ${model.Model_Name} ${image.label}`}
-                angle={image.angle}
                 className="absolute inset-0 h-full w-full object-cover transition duration-300 hover:scale-105"
+                loadRemoteImage
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-2 sm:p-3">
                 <p className="text-xs font-semibold text-white sm:text-sm">

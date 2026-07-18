@@ -1,7 +1,8 @@
 import { type CSSProperties, type KeyboardEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CarPreview } from "@/components/CarPreview";
+import { CarPhoto } from "@/components/CarPhoto";
+import { getCarImageUrl } from "@/data/indiaCars";
 import { getMakeAccent, getModelSlug, type VehicleModel } from "@/lib/nhtsa";
  
 interface VehicleModelWithHistory extends VehicleModel {
@@ -26,12 +27,14 @@ export function CarModelCard({ model, isSelected = false, onSelect }: CarModelCa
   const content = (
     <>
       <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100">
-        <CarPreview
+        <CarPhoto
           makeName={model.Make_Name}
           modelName={model.Model_Name}
-          angle="23"
+          fallbackSrc={getCarImageUrl(model.Make_Name, model.Model_Name, "23")}
           alt={`${model.Make_Name} ${model.Model_Name} 2026 front three-quarter`}
           className="absolute inset-0 z-10 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          priority
+          loadRemoteImage
         />
         <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
         <div
