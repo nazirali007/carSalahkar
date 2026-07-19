@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CarPreview } from "@/components/CarPreview";
 
 type CarPhotoProps = {
   makeName: string;
@@ -99,34 +100,15 @@ export function CarPhoto({
   }
 
   if (displaySrc?.startsWith?.("data:image/svg+xml")) {
-    let svgMarkup: string | null = null;
-
-    try {
-      const prefix = displaySrc.split(",")[0] + ",";
-      const encoded = displaySrc.slice(prefix.length);
-      svgMarkup = decodeURIComponent(encoded);
-    } catch {
-      // Fall back to <img> if decoding fails.
-    }
-
-    if (svgMarkup) {
-      const innerSvg = svgMarkup
-        .replace(/^<svg[^>]*>/i, "")
-        .replace(/<\/svg>\s*$/i, "");
-
-      return (
-        <svg
-          className={`${className ?? ""} block`}
-          role="img"
-          aria-label={alt}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1000 620"
-          preserveAspectRatio="xMidYMid slice"
-          style={{ width: "100%", height: "100%", display: "block", overflow: "hidden" }}
-          dangerouslySetInnerHTML={{ __html: innerSvg }}
-        />
-      );
-    }
+    return (
+      <CarPreview
+        makeName={makeName}
+        modelName={modelName}
+        angle={angle as "23" | "09" | "05" | "01" | undefined}
+        alt={alt}
+        className={className}
+      />
+    );
   }
 
   return (
